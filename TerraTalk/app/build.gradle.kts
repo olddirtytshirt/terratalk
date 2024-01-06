@@ -1,15 +1,24 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+
+    // Add the Google services Gradle plugin
+    id("com.google.gms.google-services")
 }
 
 android {
+    //keep namespace the same as applicationId below.
+    //should always match the project's base package name (app code)
+    //DO NOT CHANGE
     namespace = "com.example.terratalk"
     compileSdk = 34
 
     defaultConfig {
+        //DO NOT CHANGE
         applicationId = "com.example.terratalk"
-        minSdk = 24
+        //min api level
+        minSdk = 26
+        //target api level
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -34,6 +43,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        //turn jetpack compose on
         compose = true
     }
     composeOptions {
@@ -48,9 +58,13 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.0")
+    // Import the Firebase BoM
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+
+    implementation("androidx.core:core-ktx")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx")
+    implementation("androidx.activity:activity-compose")
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")

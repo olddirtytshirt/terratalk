@@ -31,18 +31,20 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        /*
         GlobalScope.launch(Dispatchers.IO) {
             ParseIrishTimes()
         }
+
+         */
     }
 
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun Greeting(name: String) {
     Text(
             text = "Hello $name!",
-            modifier = modifier
     )
 }
 
@@ -53,7 +55,7 @@ fun GreetingPreview() {
         Greeting("Android")
     }
 }
-
+/*
 fun ParseIrishTimes(){
     val url = "https://www.irishtimes.com/environment/climate-crisis/"
     val doc: Document = Jsoup.connect(url).get()
@@ -67,4 +69,4 @@ fun ParseIrishTimes(){
         println("Link: $link")
         println("-----------------")}
 }
-
+*/
