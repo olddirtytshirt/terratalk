@@ -14,39 +14,10 @@
       },
       "oauth_client": [
         {
-          "client_id": "291072732070-r7ho8aefo7ge1hc1g3hc3vgvi3m1tiir.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyA9eXxIQOitNnybL9fX4Mu_SEDH3vDD-TA"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "291072732070-r7ho8aefo7ge1hc1g3hc3vgvi3m1tiir.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:291072732070:android:325a57dd3b9495f542fd67",
-        "android_client_info": {
-          "package_name": "com.project.terratalk"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "291072732070-fobfvv2caiqj108qtg8ctdphh0el6o67.apps.googleusercontent.com",
+          "client_id": "291072732070-367d63e7g23l3cnv3ic9kjn20qotksba.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.project.terratalk",
+            "package_name": "com.example.terratalk",
             "certificate_hash": "309023800ec43c8e8c567f76f81da16c00092a59"
           }
         },

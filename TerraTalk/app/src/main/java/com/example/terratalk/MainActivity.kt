@@ -31,12 +31,9 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        /*
         GlobalScope.launch(Dispatchers.IO) {
-            ParseIrishTimes()
+            parseIrishTimes()
         }
-
-         */
     }
 
 }
@@ -55,8 +52,8 @@ fun GreetingPreview() {
         Greeting("Android")
     }
 }
-/*
-fun ParseIrishTimes(){
+
+fun parseIrishTimes(){
     val url = "https://www.irishtimes.com/environment/climate-crisis/"
     val doc: Document = Jsoup.connect(url).get()
     val articleElements: List<Element> = doc.select("article.custom-flex-promo")
@@ -69,4 +66,3 @@ fun ParseIrishTimes(){
         println("Link: $link")
         println("-----------------")}
 }
-*/
