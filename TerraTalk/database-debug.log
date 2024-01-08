@@ -1,0 +1,13 @@
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by io.netty.util.internal.ReflectionUtil (file:/home/bonk/.cache/firebase/emulators/firebase-database-emulator-v4.11.2.jar) to field sun.nio.ch.SelectorImpl.selectedKeys
+WARNING: Please consider reporting this to the maintainers of io.netty.util.internal.ReflectionUtil
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+15:09:08.410 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+15:09:08.543 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000
+15:09:16.954 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO com.firebase.core.namespace.NamespaceActor - terratalk-af20f-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 108ms, init: 0ms
+15:09:17.009 [NamespaceSystem-blocking-namespace-operation-dispatcher-7] INFO com.firebase.core.namespace.StateManager - Namespace terratalk-af20f-default-rtdb status Active to Active
+15:09:31.680 [Thread-0] INFO com.firebase.server.forge.App$ - Attempting graceful shutdown.
+15:09:31.685 [NamespaceSystem-akka.actor.default-dispatcher-6] INFO com.firebase.core.namespace.Terminator$Terminator - 1 actors left to terminate: terratalk-af20f-default-rtdb
+15:09:31.700 [NamespaceSystem-akka.actor.default-dispatcher-6] INFO com.firebase.core.namespace.NamespaceActor - stopped namespace actor for terratalk-af20f-default-rtdb
+15:09:31.703 [Thread-0] INFO com.firebase.server.forge.App$ - Graceful shutdown complete.
