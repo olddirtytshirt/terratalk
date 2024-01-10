@@ -1,5 +1,7 @@
 package com.example.terratalk
 
+import com.example.terratalk.Webscrapping.parseIrishTimes
+import com.example.terratalk.Webscrapping.parseIndependent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,16 +10,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.LiveData
 import androidx.compose.material3.Text
-import kotlinx.coroutines.withContext
 import androidx.compose.runtime.Composable
 import com.example.terratalk.ui.theme.TerraTalkTheme
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
-import org.jsoup.nodes.Element
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.Dispatchers
+import com.example.terratalk.Webscrapping.parseTheJournal
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -33,8 +31,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         MainScope().launch {
-            val newsItems = parseIrishTimes()
-            viewModel.setNewsItems(newsItems)
+            val newsItems1 = parseIrishTimes()
+            val newsItems2 = parseTheJournal()
+            val newsItems3 = parseIndependent()
+            viewModel.setNewsItems(newsItems1)
+            viewModel.setNewsItems(newsItems2)
+            viewModel.setNewsItems(newsItems3)
         }
 
         setContent {
@@ -78,21 +80,3 @@ fun NewsItem(title: String, link: String) {
 }
 
 
-private suspend fun parseIrishTimes(): List<Pair<String, String>> {
-    val url = "https://www.irishtimes.com/environment/climate-crisis/"
-    val doc: Document = withContext(Dispatchers.IO) {
-        Jsoup.connect(url).get()
-    }
-    val articleElements: List<Element> = doc.select("article.custom-flex-promo")
-    val newsItems = mutableListOf<Pair<String, String>>()
-
-    for (article in articleElements) {
-        val titleElement =
-            article.selectFirst("h2.primary-font__PrimaryFontStyles-ybxuz7-0.jGeesm.headline_font_md_sm.font_bold.text_decoration_none.color_custom_black_1 a")
-        val title = titleElement?.text() ?: "No title found"
-        val link = titleElement?.attr("href") ?: "No link found"
-
-        newsItems.add(title to link)
-    }
-    return newsItems
-}
