@@ -7,7 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.example.terratalk.ui.theme.TerraTalkTheme
 import androidx.lifecycle.ViewModelProvider
-import com.example.terratalk.Webscrapping.NewsList
+import com.example.terratalk.Webscrapping.NewsPage
 import com.example.terratalk.Webscrapping.NewsViewModel
 import com.example.terratalk.Webscrapping.parseTheJournal
 import kotlinx.coroutines.MainScope
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             TerraTalkTheme {
-                NewsList(viewModel)
+                NewsPage(viewModel)
             }
         }
     }
