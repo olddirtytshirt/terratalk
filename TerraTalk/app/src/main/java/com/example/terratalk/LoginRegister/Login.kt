@@ -10,8 +10,6 @@ import com.google.firebase.auth.FirebaseUser
 
 val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-
-
 fun loginUser(email: String, password: String) {
     auth.signInWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
