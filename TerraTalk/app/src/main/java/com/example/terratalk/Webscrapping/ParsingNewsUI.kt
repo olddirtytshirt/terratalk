@@ -1,43 +1,46 @@
 package com.example.terratalk.Webscrapping
 
+
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.LiveData
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import com.example.terratalk.R
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 
-import androidx.compose.ui.unit.sp
-import com.example.terratalk.R
-import kotlin.reflect.KClass
+
+
 
 class NewsViewModel : ViewModel() {
-    private val _newsItems = MutableLiveData<List<Pair<String, String>>>()
+    private val _newsItems = MutableLiveData<List<Triple<String, String, String>>>()
 
-    val newsItems: LiveData<List<Pair<String, String>>>
+    val newsItems: LiveData<List<Triple<String, String, String>>>
         get() = _newsItems
 
-    fun setNewsItems(news: List<Pair<String, String>>) {
+    fun setNewsItems(news: List<Triple<String, String, String>>) {
         _newsItems.value = news
     }
 }
@@ -67,6 +70,7 @@ fun NewsPage(
                     NewsItem(
                         title = item.first,
                         link = item.second,
+                        imageUrl = item.third,
                         onClick = {}
                     )
                     Divider(thickness = 0.5.dp)
@@ -103,6 +107,7 @@ fun NewsPageBar(
 fun NewsItem(
     title: String,
     link: String,
+    imageUrl: String,
     onClick: () -> Unit
 ) {
     Column(
@@ -134,6 +139,7 @@ fun NewsItem(
                 modifier = Modifier
                     .weight(0.25f)
             )
+
         }
 
         Row(

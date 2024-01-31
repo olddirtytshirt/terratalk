@@ -1,15 +1,10 @@
 package com.example.terratalk.Forum
 
-import java.io.Serializable
 
-data class Post(
-    var userName:String?="",
-    var userEmail:String?="",
-    var caption:String="",
-    var postId:String="",
-    var postTag:String="",
-    var postLikes:Int=0,
-    var postComments:Int=0,
-
-
-):Serializable
+class Post(userName: String? = "",
+           val userEmail: String? = "",
+           val content: String = "",
+           val postId: String = "",
+           val postTag: String = "",
+           val postLikes: Int = 0,
+           val postComments: Int = 0)
