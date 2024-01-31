@@ -39,6 +39,8 @@ fun SignIn(
     ) {
         var email by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
+        var username by remember { mutableStateOf("") }
+
 
         Column(
             modifier = Modifier
@@ -89,8 +91,19 @@ fun SignIn(
             )
         )
 
+        Spacer(modifier = Modifier.height(20.dp))
+
+        InputField(
+            label = "username",
+            value = username,
+            onValueChanged = { username = it },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            )
+        )
+
         TextButton(
-            onClick = { loginUser(email, password) }
+            onClick = { loginUser(email, password, username) }
         ) {
             Text("login")
         }
