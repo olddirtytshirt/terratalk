@@ -51,6 +51,20 @@ data class User (
     fun createPost(username: String, content: String, database: FirebaseDatabase){
 
         val newPost = Post(username, content)
+        val postref = database.getReference("posts")
+        val postkey = postref.push().key
+        postkey?.let{
+            newPost.postId = it
+            postref.child(postkey).setValue(newPost)
+        }
 
+        posts.add(newPost.postId)
+        updatePostsinFirebase(database)
+    }
+
+    private fun updatePostsinFirebase(database: FirebaseDatabase){
+        val usersRef = database.getReference("users")
+        val userRef = usersRef.child(userid)
+        userRef.child("posts").setValue(posts)
     }
 }
