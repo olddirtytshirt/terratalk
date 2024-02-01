@@ -72,9 +72,9 @@ fun SignIn(
         Spacer(modifier = Modifier.height(20.dp))
 
         InputField(
-            label = "email",
-            value = email,
-            onValueChanged = { email = it },
+            label = "username",
+            value = username,
+            onValueChanged = { username = it },
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Next
             )
@@ -86,17 +86,6 @@ fun SignIn(
             label = "password",
             value = password,
             onValueChanged = { password = it },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done
-            )
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        InputField(
-            label = "username",
-            value = username,
-            onValueChanged = { username = it },
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done
             )
@@ -118,6 +107,17 @@ fun SignIn(
         Spacer(modifier = Modifier.height(20.dp))
 
         InputField(
+            label = "username",
+            value = username,
+            onValueChanged = { username = it },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            )
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        InputField(
             label = "email",
             value = email,
             onValueChanged = { email = it },
@@ -125,6 +125,8 @@ fun SignIn(
                 imeAction = ImeAction.Next
             )
         )
+
+        Spacer(modifier = Modifier.height(20.dp))
 
         InputField(
             label = "password",
