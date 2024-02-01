@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             TerraTalkTheme {
-                SignIn()
+                SignIn(context = this)
             }
         }
     }

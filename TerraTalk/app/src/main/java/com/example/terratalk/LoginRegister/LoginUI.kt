@@ -1,5 +1,6 @@
 package com.example.terratalk.LoginRegister
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,16 +20,26 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+
+@Composable
 @Preview
+fun SignInPreview() {
+    val mockContext = LocalContext.current
+
+    SignIn(context = mockContext)
+}
+
+
 @Composable
 
-fun SignIn(
+fun SignIn( context: Context
 
 ) {
     Column(
@@ -72,9 +83,9 @@ fun SignIn(
         Spacer(modifier = Modifier.height(20.dp))
 
         InputField(
-            label = "username",
-            value = username,
-            onValueChanged = { username = it },
+            label = "email",
+            value = email,
+            onValueChanged = { email = it },
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Next
             )
@@ -92,7 +103,7 @@ fun SignIn(
         )
 
         TextButton(
-            onClick = { loginUser(email, password, username) }
+            onClick = { loginUser(email, password) }
         ) {
             Text("login")
         }
@@ -138,7 +149,7 @@ fun SignIn(
         )
 
         TextButton(
-            onClick = { registerUser(email, password) }
+            onClick = { registerUser(email, password, username, context) }
         ) {
             Text("register")
         }
