@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.ViewModelProvider
-import com.example.terratalk.LoginRegister.SignIn
+import com.example.terratalk.LoginRegister.SignInScreen
 import com.example.terratalk.Webscrapping.NewsViewModel
 import com.example.terratalk.Webscrapping.parseIrishTimes
 import com.example.terratalk.ui.theme.TerraTalkTheme
@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             TerraTalkTheme {
-                SignIn(context = this)
+                Navigation()
             }
         }
     }
