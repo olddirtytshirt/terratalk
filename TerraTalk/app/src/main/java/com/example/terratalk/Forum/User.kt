@@ -23,6 +23,7 @@ data class User (
         userid = firebaseUser.uid,
     )
 
+   /*
     fun setBio(bio: String){
         this.bio = bio
 
@@ -46,7 +47,7 @@ data class User (
     fun setStatus(status: String){
         this.status = status
 
-    }
+    }*/
 
     fun createPost(username: String, content: String, database: FirebaseDatabase){
 
