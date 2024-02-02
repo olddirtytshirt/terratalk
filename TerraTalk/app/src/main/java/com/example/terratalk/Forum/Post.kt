@@ -1,10 +1,14 @@
 package com.example.terratalk.Forum
 
 
-class Post(userName: String? = "",
-           val userEmail: String? = "",
-           val content: String = "",
-           val postId: String = "",
-           val postTag: String = "",
-           val postLikes: Int = 0,
-           val postComments: Int = 0)
+data class Post(
+    val userName: String? = "",
+    val title: String? = "",
+    val content: String = "",
+    var postId: String = "",
+    val postTag: String = "",
+    val postLikes: Int = 0,
+    val postComments: Int = 0
+)
+
+

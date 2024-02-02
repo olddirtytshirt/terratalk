@@ -3,9 +3,9 @@ package com.example.terratalk.LoginRegister
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import com.example.terratalk.Forum.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.example.terratalk.Forum.User
 
 
 val auth: FirebaseAuth = FirebaseAuth.getInstance()
