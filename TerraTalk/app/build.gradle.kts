@@ -75,6 +75,7 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.6.0")
     implementation("io.coil-kt:coil-compose:2.5.0")
     implementation ("androidx.core:core-ktx:1.12.0")
+    implementation ("com.squareup.okhttp3:okhttp:4.12.0")
     implementation ("androidx.appcompat:appcompat:1.6.1")
     implementation ("androidx.fragment:fragment-ktx:1.6.2")
     implementation("com.google.firebase:firebase-auth-ktx:22.3.1")

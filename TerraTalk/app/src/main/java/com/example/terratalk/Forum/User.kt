@@ -55,7 +55,6 @@ data class User (
         val postref = database.getReference("posts")
         val postkey = postref.push().key
         postkey?.let{
-            newPost.postId = it
             postref.child(postkey).setValue(newPost)
         }
 
