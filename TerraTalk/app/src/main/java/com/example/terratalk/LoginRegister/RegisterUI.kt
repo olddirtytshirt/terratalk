@@ -1,5 +1,9 @@
 package com.example.terratalk.LoginRegister
 
+import com.example.terratalk.ui.AutoResizedText
+import com.example.terratalk.ui.InputField
+import com.example.terratalk.ui.PasswordField
+
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,6 +21,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -40,8 +44,12 @@ import androidx.navigation.NavController
 import com.example.terratalk.R
 
 
+//CODE REFERENCES:
 //validation tutorial that was followed
 //https://medium.com/@jecky999/designing-a-login-screen-with-validation-using-jetpack-compose-7c7483c63c0c
+
+// password visibility icon implementation
+// https://alitalhacoban.medium.com/show-hide-password-jetpack-compose-d0c4abac568f#:~:text=Hide%20the%20Text%20in%20TextField&text=visualTransformation%20%3D%20PasswordVisualTransformation()%2C,want%20for%20the%20password%20field.
 
 
 @Composable
@@ -72,8 +80,6 @@ fun RegisterScreen(
 
         //register validation
         var isValid by remember { mutableStateOf(true) }
-
-        val focusRequester = remember { FocusRequester() }
         val focusManager = LocalFocusManager.current
 
 
@@ -89,10 +95,9 @@ fun RegisterScreen(
                 modifier = Modifier
                     .size(250.dp)
             )
-            Text(
+            AutoResizedText(
                 text = "//welcome to terratalk",
-                fontSize = 30.sp,
-                fontWeight = FontWeight.ExtraBold,
+                style = MaterialTheme.typography.headlineMedium
             )
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -106,7 +111,7 @@ fun RegisterScreen(
 
         }
 
-        Spacer(modifier = Modifier.height(70.dp))
+        Spacer(modifier = Modifier.height(50.dp))
 
         InputField(
             label = "username",
@@ -179,6 +184,7 @@ fun RegisterScreen(
         Spacer(modifier = Modifier.height(50.dp))
 
         OutlinedButton(
+            //when button clicked, registerUser
             onClick = {
                 registerUser(email, password, username, navController, context)
             },

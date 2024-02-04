@@ -1,5 +1,9 @@
 package com.example.terratalk.LoginRegister
 
+import com.example.terratalk.ui.AutoResizedText
+import com.example.terratalk.ui.InputField
+import com.example.terratalk.ui.PasswordField
+
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -20,8 +23,8 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,8 +40,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,9 +50,12 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 
+//CODE REFERENCES:
 //validation tutorial that was followed
 //https://medium.com/@jecky999/designing-a-login-screen-with-validation-using-jetpack-compose-7c7483c63c0c
 
+// password visibility icon implementation
+// https://alitalhacoban.medium.com/show-hide-password-jetpack-compose-d0c4abac568f#:~:text=Hide%20the%20Text%20in%20TextField&text=visualTransformation%20%3D%20PasswordVisualTransformation()%2C,want%20for%20the%20password%20field.
 
 @Composable
 fun SignInPreview(navController: NavController) {
@@ -69,7 +73,6 @@ fun SignInScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            // TO DO -- if app is in dark mode - black background!!!
             .background(Color.White)
             .padding(start = 30.dp, top = 10.dp, end = 30.dp, bottom = 20.dp)
     ) {
@@ -96,10 +99,10 @@ fun SignInScreen(
                 modifier = Modifier
                     .size(250.dp)
             )
-            Text(
+
+            AutoResizedText(
                 text = "//welcome to terratalk",
-                fontSize = 30.sp,
-                fontWeight = FontWeight.ExtraBold,
+                style = MaterialTheme.typography.headlineMedium
             )
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -113,7 +116,7 @@ fun SignInScreen(
 
         }
 
-        Spacer(modifier = Modifier.height(70.dp))
+        Spacer(modifier = Modifier.height(50.dp))
 
         Text(
             text = "already an user ?",
@@ -152,14 +155,14 @@ fun SignInScreen(
                 onDone = {
                     isValid = isValidEmail(email) && isValidPassword(password)
                     if(isValid) {
-                        loginUser(email, password)
+                        loginUser(email, password, context, navController)
                     }
                     //close keyboard
                     focusManager.clearFocus()
                 },
             ),
 
-            // password visibility icon
+            // password visibility icon implementation
             // https://alitalhacoban.medium.com/show-hide-password-jetpack-compose-d0c4abac568f#:~:text=Hide%20the%20Text%20in%20TextField&text=visualTransformation%20%3D%20PasswordVisualTransformation()%2C,want%20for%20the%20password%20field.
             trailingIcon = {
                 if (showPassword) {
@@ -235,62 +238,3 @@ fun isValidPassword(pass: String?): Boolean {
     } else false
 }
 
-@Composable
-fun InputField(
-    label: String,
-    value: String,
-    onValueChanged: (String) -> Unit,
-    keyboardOptions: KeyboardOptions,
-    keyboardActions: KeyboardActions? = null,
-    modifier: Modifier = Modifier
-        .fillMaxWidth()
-) {
-
-    OutlinedTextField(
-        label = { Text(label)},
-        value = value,
-        onValueChange = onValueChanged,
-        modifier = modifier,
-        keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions ?: KeyboardActions.Default,
-        shape = RoundedCornerShape(30.dp),
-        singleLine = true,
-    )
-}
-
-@Composable
-fun PasswordField(
-    label: String,
-    value: String,
-    showPassword: Boolean,
-    onValueChanged: (String) -> Unit,
-    keyboardOptions: KeyboardOptions,
-    keyboardActions: KeyboardActions? = null,
-    trailingIcon: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier
-        .fillMaxWidth()
-) {
-
-    OutlinedTextField(
-        label = { Text(label)},
-        value = value,
-        onValueChange = onValueChanged,
-        modifier = modifier,
-        visualTransformation = if (showPassword) {
-
-            VisualTransformation.None
-
-        } else {
-
-            PasswordVisualTransformation()
-
-        },
-
-        keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions ?: KeyboardActions.Default,
-        trailingIcon = trailingIcon,
-        shape = RoundedCornerShape(30.dp),
-        singleLine = true,
-        //supportingText = { Text(text = "password needs to be more than 6 characters long")}
-    )
-}

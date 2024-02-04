@@ -10,18 +10,27 @@ import com.example.terratalk.Forum.User
 import com.example.terratalk.Screen
 import java.util.Objects
 
-
 val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-fun loginUser(email: String, password: String) {
+fun loginUser(email: String, password: String, context: Context, navController: NavController) {
     auth.signInWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 // Login successful
                 val user = auth.currentUser
+                if(user!!.isEmailVerified()) {
+                    navController.navigate(Screen.NewsPage.route)
+                } else {
+                    Toast.makeText(context, "please verify your email", Toast.LENGTH_SHORT).show()
+
+                }
+
             } else {
                 // Login failed
                 Log.w("Login", "signInWithEmail:failure", task.exception)
+                // display error message
+                Toast.makeText(context, Objects.toString(task.exception!!.message), Toast.LENGTH_SHORT).show()
+
             }
         }
 }
@@ -58,7 +67,7 @@ fun registerUser(email: String, password: String, username: String, navControlle
                 // registration failed
                 Log.w("Registration", "createUserWithEmail:failure", task.exception)
                 // pop up indicating error message
-                Toast.makeText(context, Objects.toString(task.exception!!.message), Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, Objects.toString(task.exception!!.message), Toast.LENGTH_LONG).show()
             }
         }
 }
