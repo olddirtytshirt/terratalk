@@ -5,4 +5,5 @@ sealed class Screen(
 ) {
     object SignInPreview : Screen("SignIn")
     object RegisterPreview : Screen("Register")
+    object NewsPage : Screen("NewsPage")
 }

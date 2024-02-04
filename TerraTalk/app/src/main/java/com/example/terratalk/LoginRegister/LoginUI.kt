@@ -15,6 +15,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -25,13 +30,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,7 +51,6 @@ import java.util.regex.Pattern
 
 //validation tutorial that was followed
 //https://medium.com/@jecky999/designing-a-login-screen-with-validation-using-jetpack-compose-7c7483c63c0c
-
 
 
 @Composable
@@ -70,10 +76,12 @@ fun SignInScreen(
         var email by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
 
+        //state variable that controls visibility when typing password or not
+        var showPassword by remember { mutableStateOf(value = false) }
+
         //login validation
         var isValid by remember { mutableStateOf(true)}
 
-        val focusRequester = remember { FocusRequester() }
         val focusManager = LocalFocusManager.current
 
         Column(
@@ -122,15 +130,19 @@ fun SignInScreen(
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Next
             ),
-        )
+
+            )
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        InputField(
+
+        PasswordField(
             label = "password",
             value = password,
+            showPassword,
             onValueChanged = { password = it },
             keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(
@@ -144,8 +156,30 @@ fun SignInScreen(
                     }
                     //close keyboard
                     focusManager.clearFocus()
+                },
+            ),
+
+            // password visibility icon
+            // https://alitalhacoban.medium.com/show-hide-password-jetpack-compose-d0c4abac568f#:~:text=Hide%20the%20Text%20in%20TextField&text=visualTransformation%20%3D%20PasswordVisualTransformation()%2C,want%20for%20the%20password%20field.
+            trailingIcon = {
+                if (showPassword) {
+                    IconButton(onClick = { showPassword = false }) {
+                        Icon(
+                            imageVector = Icons.Filled.Visibility,
+                            contentDescription = "hide_password"
+                        )
+                    }
+                } else {
+                    IconButton(
+                        onClick = { showPassword = true }) {
+                        Icon(
+                            imageVector = Icons.Filled.VisibilityOff,
+                            contentDescription = "hide_password"
+                        )
+                    }
                 }
-            )
+            }
+
         )
 
         if(!isValid) {
@@ -176,7 +210,7 @@ fun SignInScreen(
                 modifier = Modifier.align(Alignment.CenterVertically)
             ) {
                 Text(
-                    text = "register",
+                    text = "sign up",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                 )
@@ -219,6 +253,44 @@ fun InputField(
         modifier = modifier,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions ?: KeyboardActions.Default,
-        shape = RoundedCornerShape(30.dp)
+        shape = RoundedCornerShape(30.dp),
+        singleLine = true,
+    )
+}
+
+@Composable
+fun PasswordField(
+    label: String,
+    value: String,
+    showPassword: Boolean,
+    onValueChanged: (String) -> Unit,
+    keyboardOptions: KeyboardOptions,
+    keyboardActions: KeyboardActions? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    modifier: Modifier = Modifier
+        .fillMaxWidth()
+) {
+
+    OutlinedTextField(
+        label = { Text(label)},
+        value = value,
+        onValueChange = onValueChanged,
+        modifier = modifier,
+        visualTransformation = if (showPassword) {
+
+            VisualTransformation.None
+
+        } else {
+
+            PasswordVisualTransformation()
+
+        },
+
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions ?: KeyboardActions.Default,
+        trailingIcon = trailingIcon,
+        shape = RoundedCornerShape(30.dp),
+        singleLine = true,
+        //supportingText = { Text(text = "password needs to be more than 6 characters long")}
     )
 }

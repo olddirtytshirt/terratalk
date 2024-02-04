@@ -12,6 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -62,6 +67,8 @@ fun RegisterScreen(
         var email by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
         var username by remember { mutableStateOf("") }
+        //state variable that controls visibility when typing password or not
+        var showPassword by remember { mutableStateOf(value = false) }
 
         //register validation
         var isValid by remember { mutableStateOf(true) }
@@ -123,9 +130,10 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        InputField(
+        PasswordField(
             label = "password",
             value = password,
+            showPassword,
             onValueChanged = { password = it },
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done
@@ -140,7 +148,25 @@ fun RegisterScreen(
                     //close keyboard
                     focusManager.clearFocus()
                 }
-            )
+            ),
+            trailingIcon = {
+                if (showPassword) {
+                    IconButton(onClick = { showPassword = false }) {
+                        Icon(
+                            imageVector = Icons.Filled.Visibility,
+                            contentDescription = "hide_password"
+                        )
+                    }
+                } else {
+                    IconButton(
+                        onClick = { showPassword = true }) {
+                        Icon(
+                            imageVector = Icons.Filled.VisibilityOff,
+                            contentDescription = "hide_password"
+                        )
+                    }
+                }
+            }
         )
 
         if(!isValid) {
@@ -153,22 +179,20 @@ fun RegisterScreen(
         Spacer(modifier = Modifier.height(50.dp))
 
         OutlinedButton(
-                onClick = {
-                    registerUser(email, password, username, context)
-                },
+            onClick = {
+                registerUser(email, password, username, navController, context)
+            },
 
             ) {
-                Text(
-                    text = "register",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-            }
+            Text(
+                text = "register",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        }
 
     }
 }
-
-
