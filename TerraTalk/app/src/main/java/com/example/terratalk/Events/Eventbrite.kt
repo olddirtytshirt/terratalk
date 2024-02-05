@@ -5,11 +5,14 @@ import android.util.Log
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
-import org.jsoup.helper.HttpConnection
+import java.util.UUID
 
-data class Event(
+
+data class Events(
     val title: String = "",
     val date: String = "",
+    val location: String = "",
+    var eventId: String = UUID.randomUUID().toString()
 
     )
 
@@ -18,8 +21,8 @@ class Eventbrite(private val apiKey: String) {
     private val client = OkHttpClient()
     //private val apiKey =
 
-    fun searchEvents(): List<Event> {
-        val request = HttpConnection.Request.Builder()
+    fun searchEvents(): List<Events> {
+        val request = Request.Builder()
             .url("https://www.eventbriteapi.com/v3/events/search/?q=environmentalism")
             .header("Authorization", "Bearer $apiKey")
             .build()
@@ -36,9 +39,9 @@ class Eventbrite(private val apiKey: String) {
     }
 
 
-    private fun parseEvents(responseBody: String): List<Event> {
+    private fun parseEvents(responseBody: String): List<Events> {
 
-        val events = mutableListOf<Event>()
+        val events = mutableListOf<Events>()
 
         val json = JSONObject(responseBody)
         val eventList = json.optJSONArray("events")
@@ -49,7 +52,7 @@ class Eventbrite(private val apiKey: String) {
                 val eventName = eventObject.getJSONObject("name").getString("text")
                 val eventDate = eventObject.getJSONObject("start").getString("local")
 
-                val event = Event(eventName, eventDate)
+                val event = Events(eventName, eventDate)
                 events.add(event)
             }
         }

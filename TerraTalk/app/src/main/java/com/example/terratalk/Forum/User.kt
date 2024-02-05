@@ -1,8 +1,10 @@
 package com.example.terratalk.Forum
-
-
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.MutableData
+import com.google.firebase.database.Transaction
 
 
 data class User (
@@ -14,7 +16,8 @@ data class User (
     var cover: String = "",
     var token: String = "",
     var status: String = "",
-    val posts: MutableList<String> = mutableListOf()
+    val posts: MutableList<Post> = mutableListOf(),
+    val comments: MutableList<Comment> = mutableListOf()
 ){
 
     constructor(firebaseUser: FirebaseUser): this(
@@ -58,13 +61,64 @@ data class User (
             postref.child(postkey).setValue(newPost)
         }
 
-        posts.add(newPost.postId)
-        updatePostsinFirebase(database)
+        posts.add(newPost)
+        updatePostFirebase(database)
     }
 
-    private fun updatePostsinFirebase(database: FirebaseDatabase){
+    private fun updatePostFirebase(database: FirebaseDatabase){
         val usersRef = database.getReference("users")
         val userRef = usersRef.child(userid)
-        userRef.child("posts").setValue(posts)
+        userRef.child("posts").setValue(posts.map{it.postId})
     }
-}
+
+    fun likePost(postId: String,database: FirebaseDatabase,  userId: String ) {
+        val postRef = database.getReference("posts/$postId")
+
+
+        postRef.runTransaction(object : Transaction.Handler {
+            override fun doTransaction(currentData: MutableData): Transaction.Result {
+                val post = currentData.getValue(Post::class.java)
+
+
+                if (post == null || post.postId != postId) {
+                    return Transaction.success(currentData)
+                }
+
+
+                post.postLikes += 1
+
+                currentData.value = post
+                return Transaction.success(currentData)
+            }
+
+            override fun onComplete(error: DatabaseError?, committed: Boolean, currentData: DataSnapshot?) {
+            }
+        })
+    }
+
+    fun commentPost(postId: String, database: FirebaseDatabase,  userId: String, commentContent: String ) {
+        val postRef = database.getReference("posts/$postId")
+
+
+        postRef.runTransaction(object : Transaction.Handler {
+            override fun doTransaction(currentData: MutableData): Transaction.Result {
+                val post = currentData.getValue(Post::class.java)
+
+
+                if (post == null || post.postId != postId) {
+                    return Transaction.success(currentData)
+                }
+
+
+                post.numComments += 1
+
+                val newcomment = Comment(commentContent, username, userid)
+                post.postComments.add(newcomment)
+                currentData.value = post
+                return Transaction.success(currentData)
+            }
+
+            override fun onComplete(error: DatabaseError?, committed: Boolean, currentData: DataSnapshot?) {
+            }
+        })
+    }}
