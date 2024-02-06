@@ -1,8 +1,9 @@
-package com.example.terratalk.Forum
+package com.example.terratalk.models
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.terratalk.models.User
 import com.google.firebase.database.FirebaseDatabase
 import java.util.UUID
 
@@ -18,6 +19,7 @@ data class Post(
 )
 
 
+/*
 class PostViewModel : ViewModel(){
     val user = User()
 
@@ -40,4 +42,4 @@ class PostViewModel : ViewModel(){
     }
 }
 
-
+*/

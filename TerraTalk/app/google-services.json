@@ -1,10 +1,48 @@
 {
   "project_info": {
     "project_number": "291072732070",
+    "firebase_url": "https://terratalk-af20f-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "terratalk-af20f",
     "storage_bucket": "terratalk-af20f.appspot.com"
   },
   "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:291072732070:android:2f12eeb39c785f4b42fd67",
+        "android_client_info": {
+          "package_name": "com.ca326.test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "291072732070-svh1jsug4ndsmtut4ea6roq7asc9u18q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ca326.test",
+            "certificate_hash": "309023800ec43c8e8c567f76f81da16c00092a59"
+          }
+        },
+        {
+          "client_id": "291072732070-r7ho8aefo7ge1hc1g3hc3vgvi3m1tiir.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9eXxIQOitNnybL9fX4Mu_SEDH3vDD-TA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "291072732070-r7ho8aefo7ge1hc1g3hc3vgvi3m1tiir.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
     {
       "client_info": {
         "mobilesdk_app_id": "1:291072732070:android:1432e92019a5789742fd67",

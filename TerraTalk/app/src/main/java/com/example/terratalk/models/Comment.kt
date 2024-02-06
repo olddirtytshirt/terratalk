@@ -1,4 +1,4 @@
-package com.example.terratalk.Forum
+package com.example.terratalk.models
 
 data class Comment(
     var commentId:String="",

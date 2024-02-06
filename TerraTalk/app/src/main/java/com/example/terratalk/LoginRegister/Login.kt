@@ -1,12 +1,11 @@
 package com.example.terratalk.LoginRegister
 
+import com.example.terratalk.ReadandWrite
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
-import com.example.terratalk.Forum.User
 import com.example.terratalk.Screen
 import java.util.Objects
 
@@ -22,7 +21,6 @@ fun loginUser(email: String, password: String, context: Context, navController: 
                     navController.navigate(Screen.NewsPage.route)
                 } else {
                     Toast.makeText(context, "please verify your email", Toast.LENGTH_SHORT).show()
-
                 }
 
             } else {
@@ -35,21 +33,6 @@ fun loginUser(email: String, password: String, context: Context, navController: 
         }
 }
 
-fun updateProfile(user: User, username: String){
-    val userId = user.userid
-    SetUsername(userId, username)
-}
-
-
-fun SetUsername(userId: String, username: String){
-
-    val database = FirebaseDatabase.getInstance()
-    val usersRef = database.getReference("users")
-    val userRef = usersRef.child(userId)
-
-    userRef.child("username").setValue(username)
-
-}
 
 fun registerUser(email: String, password: String, username: String, navController: NavController, context: Context) {
     auth.createUserWithEmailAndPassword(email, password)
@@ -58,13 +41,16 @@ fun registerUser(email: String, password: String, username: String, navControlle
                 // get current user
                 val user = auth.currentUser
                 if(user != null){
-                    val newUser = User(Objects.toString(user))
-                    updateProfile(newUser, username)
+                    //initialise Database
+                    val rw = ReadandWrite()
+                    rw.initialiseDb()
+                    //write new user in database
+                    rw.writeNewUser(username, email, user.uid)
                     sendEmailVerification(context, navController)
                 }
 
             } else {
-                // registration failed
+                // log error in logcat
                 Log.w("Registration", "createUserWithEmail:failure", task.exception)
                 // pop up indicating error message
                 Toast.makeText(context, Objects.toString(task.exception!!.message), Toast.LENGTH_LONG).show()
@@ -85,7 +71,7 @@ fun sendEmailVerification(context: Context, navController: NavController) {
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Toast.makeText(context, "Verification email sent", Toast.LENGTH_SHORT).show()
-                navController.navigate(Screen.NewsPage.route)
+                //navController.navigate(Screen.NewsPage.route)
 
             } else {
                 Log.e("Verification", "sendEmailVerification:failure", task.exception)
