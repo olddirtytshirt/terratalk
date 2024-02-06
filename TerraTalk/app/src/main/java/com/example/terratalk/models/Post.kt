@@ -14,8 +14,9 @@ data class Post(
     var content: String = "",
     var postId: String = UUID.randomUUID().toString(),
     val postTag: String = "",
-    val postLikes: Int = 0,
-    val postComments: Int = 0
+    var postLikes: Int = 0,
+    val postComments: MutableList<Comment> = mutableListOf(),
+    var numComments: Int = 0
 )
 
 
@@ -40,6 +41,11 @@ class PostViewModel : ViewModel(){
     fun createPost(database:FirebaseDatabase){
         user.createPost(title1.value, content1.value, database)
     }
+
+    fun commentPost(postId: String, database: FirebaseDatabase, userId: String, commentText: String) {
+        user.commentPost(postId, database, userId, commentText)
+    }
+
 }
 
 */
