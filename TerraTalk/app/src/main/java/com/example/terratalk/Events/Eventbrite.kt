@@ -2,24 +2,15 @@ package com.example.terratalk.Events
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import com.example.terratalk.models.Events
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
-import java.util.UUID
-
-
-data class Events(
-    val title: String = "",
-    val date: String = "",
-    val location: String = "",
-    var eventId: String = UUID.randomUUID().toString()
-
-    )
 
 class Eventbrite(private val apiKey: String) {
 
     private val client = OkHttpClient()
-    //private val apiKey =
+    //private val apiKey = will do later
 
     fun searchEvents(): List<Events> {
         val request = Request.Builder()

@@ -18,14 +18,14 @@ fun User.createPost(username: String, content: String, database: FirebaseDatabas
         postref.child(postkey).setValue(newPost)
     }
 
-    posts.add(newPost.postId)
+    postsCreated.add(newPost.postId)
     updatePostsinFirebase(database)
 }
 
 fun User.updatePostsinFirebase(database: FirebaseDatabase){
     val usersRef = database.getReference("users")
     val userRef = usersRef.child(userId)
-    userRef.child("posts").setValue(posts)
+    userRef.child("posts").setValue(postsCreated)
 }
 
 fun User.likePost(postId: String,database: FirebaseDatabase,  userId: String ) {

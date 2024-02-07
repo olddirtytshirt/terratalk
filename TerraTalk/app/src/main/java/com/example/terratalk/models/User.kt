@@ -11,7 +11,8 @@ data class User (
     val cover: String? = null,
     val token: String? = null,
     val status: String? = null,
-    val posts: MutableList<String> = mutableListOf()
+    val postsCreated: MutableList<String> = mutableListOf(),
+    val eventsSaved: MutableList<String> = mutableListOf()
 ) {
 
     constructor(firebaseUser: FirebaseUser) : this(
