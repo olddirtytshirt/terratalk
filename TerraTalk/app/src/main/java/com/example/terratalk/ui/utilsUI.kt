@@ -4,11 +4,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -21,14 +27,24 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isUnspecified
+import androidx.compose.ui.unit.sp
+import com.example.terratalk.BottomNavItem
+import androidx.compose.material3.Text as Text
 
 
-//CODE REFERENCES:
+//file containing multiple functions/composables used in multiple screens
+//to avoid repeating code in each screen
 
-//AutoResizedText() implementation from video link below
-//https://www.youtube.com/watch?v=ntlyrFw0F9U
+/*
+CODE REFERENCES:
 
-//function to auto resize font size based on width amount
+AutoResizedText() implementation from video link below
+https://www.youtube.com/watch?v=ntlyrFw0F9U
+
+ */
+
+
+//function to auto resize font size based on screen width amount
 @Composable
 fun AutoResizedText(
     text: String,
@@ -72,6 +88,7 @@ fun AutoResizedText(
     )
 }
 
+
 //function to define a standard app Input Field
 @Composable
 fun InputField(
@@ -85,7 +102,7 @@ fun InputField(
 ) {
 
     OutlinedTextField(
-        label = { Text(label)},
+        label = { Text(label) },
         value = value,
         onValueChange = onValueChanged,
         modifier = modifier,
@@ -96,7 +113,24 @@ fun InputField(
     )
 }
 
+//function to define the top bar in app screens
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PageBar(
+    title: String,
+) {
+    TopAppBar(
+        title = { Text(
+            text = title,
+            fontWeight = FontWeight.Bold,
+            fontSize = 25.sp,
+        ) }
+
+    )
+}
+
 //function for password field
+//we can toggle visibility on or off
 @Composable
 fun PasswordField(
     label: String,
@@ -111,7 +145,7 @@ fun PasswordField(
 ) {
 
     OutlinedTextField(
-        label = { Text(label)},
+        label = { Text(label) },
         value = value,
         onValueChange = onValueChanged,
         modifier = modifier,
@@ -132,5 +166,31 @@ fun PasswordField(
         singleLine = true,
         //supportingText = { Text(text = "password needs to be more than 6 characters long")}
     )
+}
+
+@Composable
+fun BottomNavigation() {
+
+    var selectedItem by remember { mutableIntStateOf(0) }
+
+    val items = listOf(
+        BottomNavItem.NewsPage,
+        BottomNavItem.EventsPage,
+        BottomNavItem.MapsPage,
+        BottomNavItem.ForumPage,
+        BottomNavItem.ProfilePage
+    )
+
+    NavigationBar {
+        items.forEachIndexed { index, item ->
+            NavigationBarItem(
+                icon = { Icon(item.icon, contentDescription = item.title) },
+                label = { Text(item.title) },
+                selected = selectedItem == index,
+                onClick = { selectedItem = index },
+                colors = NavigationBarItemDefaults.colors()
+            )
+        }
+    }
 }
 
