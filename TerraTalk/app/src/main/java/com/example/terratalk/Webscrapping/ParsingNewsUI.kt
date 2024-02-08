@@ -1,7 +1,6 @@
 package com.example.terratalk.Webscrapping
 
 
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,30 +8,30 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.terratalk.R
-
-
+import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
+import com.example.terratalk.ui.BottomNavigation
+import com.example.terratalk.ui.PageBar
 
 
 class NewsViewModel : ViewModel() {
@@ -47,72 +46,61 @@ class NewsViewModel : ViewModel() {
 @Composable
 fun NewsPage(
     viewModel: NewsViewModel,
-    modifier: Modifier = Modifier, // Provide a default value for modifier
+    navController: NavController
 ) {
     val newsItemsState = viewModel.newsItems.observeAsState(initial = emptyList())
     val newsItems = newsItemsState.value
+
+    //Screen Scaffold
+    //Structure:
+    //topBar
+    //content
+    //bottomBar
     Scaffold(
         topBar = {
-            NewsPageBar()
+            PageBar("//news")
+        },
+        bottomBar = {
+            BottomNavigation()
         }
-
+    //content
     ) { innerPadding ->
         Column (
-            modifier = modifier
+            modifier = Modifier
                 .padding(innerPadding)
         ){
             LazyColumn (
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(horizontal = 20.dp)
             ){
                 //display all news articles using lazy column
+                //more efficient, optimised
                 items(newsItems) { item ->
                     NewsItem(
                         title = item.first,
                         link = item.second,
                         imageUrl = item.third,
-                        onClick = {}
                     )
-                    Divider(thickness = 0.5.dp)
+                    Divider(thickness = 1.dp)
                 }
             }
         }
     }
 }
 
-@Composable
-fun NavBar(
-    //*** TO DO ***//
-) {
 
-
-}
-
-@Preview
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun NewsPageBar(
-) {
-    TopAppBar(
-        title = { Text(
-            text = "//news",
-            fontWeight = FontWeight.Bold,
-            fontSize = 25.sp
-        ) }
-
-    )
-}
-
+//function to display individual news articles
 @Composable
 fun NewsItem(
     title: String,
     link: String,
     imageUrl: String,
-    onClick: () -> Unit
 ) {
+    val handler = LocalUriHandler.current
+
     Column(
         modifier = Modifier
-            .fillMaxWidth() // Set width to maximum
+            .fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
@@ -121,42 +109,27 @@ fun NewsItem(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Title takes up 75% of the row
-            Text(
-                text = title,
+            //title takes up 75% of the row
+            ClickableText(
+                text = AnnotatedString(title),
                 modifier = Modifier
-                    .weight(0.75f)
+                    .weight(0.75f),
+                onClick = { handler.openUri(link)}
             )
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            // Image takes up 25% of the row
-            // STOCK IMAGE;
-            // TO DO - CHANGE IMAGE
+            //image takes up 25% of the row
             Image(
-                painter = painterResource(id = R.drawable.ic_launcher_background),
+                painter = rememberAsyncImagePainter(imageUrl),
                 contentDescription = null,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .weight(0.25f)
+                    .size(90.dp)
+                    .clip(RoundedCornerShape(15.dp))
             )
 
         }
-
-        Row(
-            modifier = Modifier
-                .padding(start = 10.dp, bottom = 6.dp)
-        ) {
-            Text(text = "test1", fontSize = 10.sp)
-            Spacer(modifier = Modifier.padding(5.dp))
-            Text(text = "test2", fontSize = 10.sp)
-            Spacer(modifier = Modifier.padding(5.dp))
-            Text(text = "test3", fontSize = 10.sp)
-        }
     }
-}
-
-@Composable
-fun startActivityLocal(intent: Intent) {
-    val context = LocalContext.current
-    LocalContext.current.startActivity(intent)
 }

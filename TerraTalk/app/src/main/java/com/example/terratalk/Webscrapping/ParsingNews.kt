@@ -8,26 +8,27 @@ import org.jsoup.nodes.Element
 
 
 suspend fun parseIrishTimes(): List<Triple<String, String, String>> {
-    val url = "https://www.irishtimes.com/environment/climate-crisis/" // Replace with the actual URL
+    //url where we take news from
+    val url = "https://www.irishtimes.com/environment/climate-crisis/"
+
     val doc: Document = withContext(Dispatchers.IO) {
         Jsoup.connect(url).get()
     }
-    val articleElements: List<Element> = doc.select("h2.primary-font__PrimaryFontStyles-ybxuz7-0 a")
+
+    val parentContainer = doc.select(".list-item")
 
     val newsItems = mutableListOf<Triple<String, String, String>>()
 
-    for (article in articleElements) {
-        val title = article.text() ?: "No title found"
-        val link = article.attr("href") ?: "No link found"
-        val imageElement = article.parent()?.select("img")?.first()
-        val imageUrl = imageElement?.attr("src") ?: "No image found"
-
+    for (container in parentContainer) {
+        val titleElement = container.selectFirst(".results-list--headline-container h2")
+        val title = titleElement?.text() ?: "No title found"
+        val link = "https://www.irishtimes.com" + container.selectFirst(".results-list--headline-container a")?.attr("href") ?: "No link found"
+        val pictureElement = container.selectFirst(".results-list--image-container picture")
+        val imageUrl = pictureElement?.select("source")?.firstOrNull()?.attr("srcset") ?: "No image found"
         newsItems.add(Triple(title, link, imageUrl))
     }
     return newsItems
 }
-
-
 
 suspend fun parseIndependent(): List<Triple<String, String, String>> {
     val url = "https://www.independent.ie/tag/environment"
