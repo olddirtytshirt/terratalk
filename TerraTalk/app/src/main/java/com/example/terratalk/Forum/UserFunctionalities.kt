@@ -3,6 +3,7 @@ package com.example.terratalk.Forum
 import com.example.terratalk.models.Comment
 import com.example.terratalk.models.Events
 import com.example.terratalk.models.Post
+import com.example.terratalk.models.PostTag
 import com.example.terratalk.models.User
 import com.example.terratalk.models.allPosts
 import com.google.firebase.database.DataSnapshot
@@ -96,7 +97,7 @@ fun Conversion(post: Post): Events{
 
 fun PosttoEvent(allPosts: MutableList<Post>, listofUserEvents: MutableList<Events>){
     for (post in allPosts){
-        if (post.postLikes > 100){
+        if (post.postLikes > 100 && post.postTag == PostTag.EVENT){
             listofUserEvents.add(Conversion(post))
 
         }
