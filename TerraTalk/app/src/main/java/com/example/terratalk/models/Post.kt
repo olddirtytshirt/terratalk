@@ -1,23 +1,30 @@
 package com.example.terratalk.models
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
-import com.example.terratalk.models.User
-import com.google.firebase.database.FirebaseDatabase
 import java.util.UUID
 
+enum class PostTag{
+    RECIPIE,
+    SCIENCE,
+    POLITICS,
+    EVENT,
+    TRAVEL,
+    GARDENING,
+    DIY,
+    OTHER
+}
 
 data class Post(
     val userName: String? = "",
     var title: String? = "",
     var content: String = "",
     var postId: String = UUID.randomUUID().toString(),
-    val postTag: String = "",
+    val postTag: PostTag = PostTag.OTHER,
     var postLikes: Int = 0,
     val postComments: MutableList<Comment> = mutableListOf(),
     var numComments: Int = 0
 )
+
+val allPosts: MutableList<Post> = mutableListOf()
 
 
 /*
