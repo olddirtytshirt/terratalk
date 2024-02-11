@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Divider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -27,27 +26,13 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.terratalk.ui.BottomNavigation
 import com.example.terratalk.ui.PageBar
 
-
-class NewsViewModel : ViewModel() {
-    private val _newsItems = MutableLiveData<List<Triple<String, String, String>>>()
-    val newsItems: LiveData<List<Triple<String, String, String>>>
-        get() = _newsItems
-
-    fun setNewsItems(news: List<Triple<String, String, String>>) {
-        _newsItems.value = news
-    }
-}
 @Composable
 fun NewsPage(
     viewModel: NewsViewModel,
@@ -66,7 +51,7 @@ fun NewsPage(
             PageBar("//news")
         },
         bottomBar = {
-            BottomNavigation()
+            BottomNavigation(navController)
         }
     //content
     ) { innerPadding ->

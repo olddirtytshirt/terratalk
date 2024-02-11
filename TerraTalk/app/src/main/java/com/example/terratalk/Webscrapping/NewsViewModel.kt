@@ -41,6 +41,11 @@ class NewsViewModel : ViewModel() {
         return newsItems
     }
 
+
+    /*
+         --- TO DO ---
+         fix image urls;
+     */
     suspend fun parseIndependent(): List<Triple<String, String, String>> {
         val url = "https://www.independent.ie/tag/environment"
         val doc: Document = withContext(Dispatchers.IO) {
@@ -62,8 +67,10 @@ class NewsViewModel : ViewModel() {
     }
 
 
-
-
+    /*
+     --- TO DO ---
+     fix image urls;
+    */
     suspend fun parseTheJournal(): List<Triple<String, String, String>> {
         val url = "https://www.thejournal.ie/climate-change/news/"
         val doc: Document = withContext(Dispatchers.IO) {

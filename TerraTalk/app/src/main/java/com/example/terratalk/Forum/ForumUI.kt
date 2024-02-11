@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -17,7 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import com.example.terratalk.models.User
+import com.example.terratalk.ui.BottomNavigation
+import com.example.terratalk.ui.PageBar
 import com.google.firebase.database.FirebaseDatabase
 
 
@@ -52,7 +56,26 @@ class PostViewModel : ViewModel() {
 
 
 @Composable
-fun Post (postViewModel: PostViewModel){
+fun ForumPage (navController: NavController){
+    Scaffold(
+        topBar = {
+            PageBar("//forum")
+        },
+        bottomBar = {
+            BottomNavigation(navController)
+        }
+        //content
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+        ) {
+
+        }
+
+    }
+}
+    /*
     val title = remember{postViewModel.title.value}
     val content = remember {postViewModel.content.value}
 
@@ -88,3 +111,5 @@ fun Post (postViewModel: PostViewModel){
         }
     }
 }
+
+     */

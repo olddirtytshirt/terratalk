@@ -71,7 +71,8 @@ fun sendEmailVerification(context: Context, navController: NavController) {
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Toast.makeText(context, "Verification email sent", Toast.LENGTH_SHORT).show()
-                //navController.navigate(Screen.NewsPage.route)
+                //go back to login page to login
+                navController.navigate(Screen.SignInPreview.route)
 
             } else {
                 Log.e("Verification", "sendEmailVerification:failure", task.exception)
