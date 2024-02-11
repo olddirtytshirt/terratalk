@@ -1,8 +1,11 @@
 package com.example.terratalk.Forum
 
 import com.example.terratalk.models.Comment
+import com.example.terratalk.models.Events
 import com.example.terratalk.models.Post
+import com.example.terratalk.models.PostTag
 import com.example.terratalk.models.User
+import com.example.terratalk.models.allPosts
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -18,7 +21,8 @@ fun User.createPost(username: String, content: String, database: FirebaseDatabas
         postref.child(postkey).setValue(newPost)
     }
 
-    postsCreated.add(newPost.postId)
+    postsCreated.add(newPost)
+    allPosts.add(newPost)
     updatePostsinFirebase(database)
 }
 
@@ -78,5 +82,25 @@ fun User.commentPost(postId: String, database: FirebaseDatabase,  userId: String
         override fun onComplete(error: DatabaseError?, committed: Boolean, currentData: DataSnapshot?) {
         }
     })
+}
+
+
+fun Conversion(post: Post): Events{
+    return Events(
+        title = post.title?: "",
+        date = "",
+        location = "",
+        eventId = post.postId
+
+    )
+}
+
+fun PosttoEvent(allPosts: MutableList<Post>, listofUserEvents: MutableList<Events>){
+    for (post in allPosts){
+        if (post.postLikes > 100 && post.postTag == PostTag.EVENT){
+            listofUserEvents.add(Conversion(post))
+
+        }
+    }
 }
 

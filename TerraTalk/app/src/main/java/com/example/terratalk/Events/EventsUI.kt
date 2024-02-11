@@ -1,47 +1,51 @@
 package com.example.terratalk.Events
 
-import android.util.Log
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color.Companion.Gray
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.terratalk.models.Events
-import com.example.terratalk.ui.PageBar
-import androidx.compose.ui.text.TextStyle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.terratalk.ui.BottomNavigation
-import kotlinx.coroutines.launch
+import com.example.terratalk.ui.PageBar
+
+
 
 
 class EventViewModel : ViewModel() {
-    private val eventbrite = Eventbrite()
+    private val _eventItems = MutableLiveData<List<Triple<String, String, String>>>()
+    val eventItems: LiveData<List<Triple<String, String, String>>>
+        get() = _eventItems
 
-    private val _eventsLiveData = MutableLiveData<List<Events>>()
-    val eventsLiveData: LiveData<List<Events>> = _eventsLiveData
-
-    fun searchEvents() {
-        viewModelScope.launch {
-            try {
-                val events = eventbrite.searchEvents()
-                _eventsLiveData.value = events
-            } catch (e: Exception) {
-                Log.e("EventViewModel", "Error fetching events", e)
-            }
-        }
+    fun setEventItems(events: List<Triple<String, String, String>>) {
+        _eventItems.value = events
     }
-}
 
+}
 
 
 @Composable
@@ -50,43 +54,90 @@ fun EventsPage(
     navController: NavController
 ) {
 
+    val eventItemsState = viewModel.eventItems.observeAsState(initial = emptyList())
+    val eventItems = eventItemsState.value
+
+    //Screen Scaffold
+    //Structure:
+    //topBar
+    //content
+    //bottomBar
     Scaffold(
         topBar = {
-            PageBar("//events")
+            PageBar("//news")
         },
         bottomBar = {
             BottomNavigation(navController)
         }
+        //content
     ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier
+                .padding(innerPadding)
         ) {
             LazyColumn(
-                modifier = Modifier.padding(horizontal = 20.dp)
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
             ) {
-
+                //display all news articles using lazy column
+                //more efficient, optimised
+                items(eventItems) { item ->
+                    EventsItem(
+                        title = item.first,
+                        link = item.second,
+                        imageUrl = item.third,
+                    )
+                    Divider(thickness = 1.dp)
+                }
             }
         }
     }
 }
 
 
+
+//function to display individual news articles
 @Composable
-fun EventItem(event: Events) {
+fun EventsItem(
+    title: String,
+    link: String,
+    imageUrl: String,
+) {
+    val handler = LocalUriHandler.current
+
     Column(
         modifier = Modifier
-            .padding(vertical = 8.dp)
+            .fillMaxWidth()
     ) {
-        Text(
-            text = event.title,
-            style = TextStyle(fontWeight = FontWeight.Bold),
-            fontSize = 18.sp
-        )
-        Text(
-            text = event.date,
-            style = TextStyle(color = Gray),
-            fontSize = 14.sp
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            //title takes up 75% of the row
+            ClickableText(
+                text = AnnotatedString(title),
+                modifier = Modifier
+                    .weight(0.75f),
+                onClick = { handler.openUri(link)}
+            )
 
+            Spacer(modifier = Modifier.width(8.dp))
+
+            //image takes up 25% of the row
+            Image(
+                painter = rememberAsyncImagePainter(imageUrl),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .weight(0.25f)
+                    .size(90.dp)
+                    .clip(RoundedCornerShape(15.dp))
+            )
+
+        }
     }
 }
+

@@ -3,21 +3,50 @@ package com.example.terratalk.models
 import com.google.firebase.auth.FirebaseUser
 
 data class User (
-    val username: String = "",
-    val email: String? = null,
+    var username: String = "",
+    var email: String? = null,
     val userId: String = "",
-    val profilePic: String? = null,
-    val bio: String? = null,
-    val cover: String? = null,
-    val token: String? = null,
-    val status: String? = null,
-    val postsCreated: MutableList<String> = mutableListOf(),
-    val eventsSaved: MutableList<String> = mutableListOf()
+    var profilePic: String? = null,
+    var bio: String? = null,
+    var cover: String? = null,
+    var token: String? = null,
+    var status: String? = null,
+    val postsCreated: MutableList<Post> = mutableListOf(),
+    val eventsSaved: MutableList<Events> = mutableListOf()
 ) {
 
     constructor(firebaseUser: FirebaseUser) : this(
         username = firebaseUser.displayName ?: "",
         email = firebaseUser.email ?: "",
         userId = firebaseUser.uid,
-    )
+    )}
+
+/*
+    fun setBio(bio: String) {
+        this.bio = bio
+
+    }
+
+    fun setprofilePic(profilePic: String) {
+        this.profilePic = profilePic
+
+    }
+
+    fun setCover(cover: String) {
+        this.cover = cover
+
+    }
+
+    fun setToken(token: String) {
+        this.token = token
+
+    }
+
+    fun setStatus(status: String) {
+        this.status = status
+
+    }
+
+
 }
+*/
