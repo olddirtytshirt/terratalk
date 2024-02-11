@@ -28,6 +28,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isUnspecified
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.terratalk.BottomNavItem
 import androidx.compose.material3.Text as Text
 
@@ -169,9 +172,11 @@ fun PasswordField(
 }
 
 @Composable
-fun BottomNavigation() {
+fun BottomNavigation(navController: NavController) {
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry?.destination?.route
 
-    var selectedItem by remember { mutableIntStateOf(0) }
+    var selectedItem by remember { mutableStateOf(0) }
 
     val items = listOf(
         BottomNavItem.NewsPage,
@@ -181,13 +186,29 @@ fun BottomNavigation() {
         BottomNavItem.ProfilePage
     )
 
+    // Determine the index of the current route
+    val currentIndex = items.indexOfFirst { it.route == currentRoute }
+    // Update the selected item state based on the current route
+    if (currentIndex != -1) {
+        selectedItem = currentIndex
+    }
+
     NavigationBar {
         items.forEachIndexed { index, item ->
             NavigationBarItem(
                 icon = { Icon(item.icon, contentDescription = item.title) },
                 label = { Text(item.title) },
                 selected = selectedItem == index,
-                onClick = { selectedItem = index },
+                onClick = {
+                    selectedItem = index
+                    navController.navigate(item.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
                 colors = NavigationBarItemDefaults.colors()
             )
         }

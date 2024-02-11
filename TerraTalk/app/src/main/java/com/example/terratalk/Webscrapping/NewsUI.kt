@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -24,7 +25,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -114,7 +119,11 @@ fun NewsItem(
                 text = AnnotatedString(title),
                 modifier = Modifier
                     .weight(0.75f),
-                onClick = { handler.openUri(link)}
+                style = TextStyle(
+                    fontSize = 16.sp, // Set the font size to 18sp
+                    fontWeight = FontWeight.Medium // Set the font weight to semi-bold
+                ),
+                onClick = { handler.openUri(link) }
             )
 
             Spacer(modifier = Modifier.width(8.dp))

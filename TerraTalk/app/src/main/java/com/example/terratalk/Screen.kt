@@ -14,39 +14,52 @@ sealed class Screen(
     object SignInPreview : Screen("SignIn")
     object RegisterPreview : Screen("Register")
     object NewsPage : Screen("NewsPage")
+    object EventsPage : Screen("EventsPage")
+    object MapsPage : Screen("MapsPage")
+    object ForumPage : Screen("ForumPage")
+    object ProfilePage : Screen("ProfilePage")
 }
 
 //used for bottom navigation, implemented in ui/utilsUI.kt
 sealed class BottomNavItem(
     var title: String,
-    var icon: ImageVector
+    var icon: ImageVector,
+    var route: String
 ) {
     object NewsPage :
         BottomNavItem(
-            "news",
-            Icons.Filled.Newspaper
+            title = "news",
+            icon = Icons.Filled.Newspaper,
+            route = Screen.NewsPage.route
         )
 
     object EventsPage :
         BottomNavItem(
-            "events",
-            Icons.Filled.Event
+            title = "events",
+            icon = Icons.Filled.Event,
+            route = Screen.EventsPage.route
         )
 
     object MapsPage :
         BottomNavItem(
-            "maps",
-            Icons.Filled.Map
+            title = "maps",
+            icon = Icons.Filled.Map,
+            route = Screen.MapsPage.route
         )
 
     object ForumPage :
         BottomNavItem(
-            "forum",
-            Icons.Filled.Forum
+            title = "forum",
+            icon = Icons.Filled.Forum,
+            route = Screen.ForumPage.route
+
         )
+
     object ProfilePage :
         BottomNavItem(
-            "profile",
-            Icons.Filled.Person
+            title ="profile",
+            icon = Icons.Filled.Person,
+            route = Screen.ProfilePage.route
         )
+
 }
