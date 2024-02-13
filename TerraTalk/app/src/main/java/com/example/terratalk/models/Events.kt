@@ -1,5 +1,6 @@
 package com.example.terratalk.models
 
+import com.google.firebase.database.FirebaseDatabase
 import java.util.UUID
 
 data class Events(
@@ -8,7 +9,8 @@ data class Events(
     val imageUrl: String,
     val date: String,
     val location: String,
-    var eventId: String = UUID.randomUUID().toString()
+    var database: FirebaseDatabase,
+    val eventId: String = UUID.randomUUID().toString(),
 
 )
 

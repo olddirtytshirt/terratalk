@@ -39,7 +39,7 @@ class MapsViewModel: ViewModel() {
                     state.value = state.value.copy(
                         lastKnownLocation = task.result,
                         )
-                    Log.d("lastKnownLocation", task.result.toString())
+                    //Log.d("lastKnownLocation", task.result.toString())
 
                 }
             }

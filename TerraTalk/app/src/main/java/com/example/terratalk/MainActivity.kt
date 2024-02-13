@@ -17,6 +17,7 @@ import com.example.terratalk.ui.theme.TerraTalkTheme
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -87,7 +88,7 @@ class MainActivity : ComponentActivity() {
         MainScope().launch {
             val newsItems1 = newsViewModel.parseIrishTimes()
             newsViewModel.setNewsItems(newsItems1)
-            val eventItems = eventsViewModel.eventbriteParse()
+            val eventItems = eventsViewModel.eventbriteParse(database = FirebaseDatabase.getInstance())
             eventsViewModel.setEventItems(eventItems)
 
         }

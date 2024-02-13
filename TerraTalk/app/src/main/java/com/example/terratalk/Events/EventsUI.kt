@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Row
+import com.example.terratalk.Events.updateEventsinFirebase
+import com.example.terratalk.Events.saveEvent
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -45,12 +47,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.example.terratalk.models.User
+import com.google.firebase.database.FirebaseDatabase
 
 
 @Composable
 fun EventsPage(
     viewModel: EventViewModel,
-    navController: NavController
+    navController: NavController,
+    user: User,
+    database: FirebaseDatabase
 ) {
     val eventItemsState = viewModel.eventItems.observeAsState()
     val eventItems = eventItemsState.value ?: emptyList()
@@ -77,7 +83,10 @@ fun EventsPage(
                         location = event.location,
                         date = event.date,
                         imageURL = event.imageUrl,
-                        link = event.link
+                        link = event.link,
+                        database = database,
+                        eventId = event.eventId,
+                        user = user,
                     )
                 }
             }
@@ -91,7 +100,10 @@ fun EventsItem(
     location: String,
     date: String,
     imageURL: String,
-    link: String
+    link: String,
+    eventId: String,
+    user: User,
+    database: FirebaseDatabase
 ) {
     val handler = LocalUriHandler.current
     var isSaved by remember { mutableStateOf(false) }
@@ -194,7 +206,16 @@ fun EventsItem(
                 }
             }
             IconButton(
-                onClick = { /* Handle click */ },
+                onClick = {
+                          if (!isSaved){
+                              user.saveEvent(eventId, database)
+                          }
+                          else{
+                              isSaved = false
+                          }
+                        user.updateEventsinFirebase(database)
+                        isSaved = !isSaved
+                          },
                 modifier = Modifier.align(Alignment.TopEnd).padding(5.dp)
             ) {
                 if(!isSaved) {

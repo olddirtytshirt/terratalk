@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.example.terratalk.Events.EventViewModel
 import com.example.terratalk.Events.EventsPage
+import com.example.terratalk.Events.getCurrentUserFromFirebase
 import com.example.terratalk.Forum.ForumPage
 import com.example.terratalk.LoginRegister.RegisterPreview
 import com.example.terratalk.LoginRegister.SignInPreview
@@ -18,6 +19,9 @@ import com.example.terratalk.Maps.MapsViewModel
 import com.example.terratalk.Profile.ProfilePage
 import com.example.terratalk.Webscrapping.NewsPage
 import com.example.terratalk.Webscrapping.NewsViewModel
+import com.example.terratalk.models.Events
+import com.example.terratalk.models.User
+import com.google.firebase.database.FirebaseDatabase
 
 
 @Composable
@@ -41,8 +45,10 @@ fun Navigation(newsViewModel: NewsViewModel,
             NewsPage(newsViewModel, navController = navController)
         }
 
+        val user: User? = getCurrentUserFromFirebase()
+
         composable(route = Screen.EventsPage.route) {
-            EventsPage(eventViewModel, navController = navController)
+            EventsPage(eventViewModel, navController = navController, user = user ?: User(), database = FirebaseDatabase.getInstance())
         }
 
         composable(route = Screen.MapsPage.route) {
