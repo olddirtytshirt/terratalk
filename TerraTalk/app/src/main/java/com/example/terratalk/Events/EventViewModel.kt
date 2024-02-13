@@ -30,7 +30,7 @@ class EventViewModel : ViewModel() {
             Jsoup.connect(url).get()
         }
 
-        val parentContainer = doc.select(".search-main-content__events-list-item.search-main-content__events-list-item__mobile")
+        val parentContainer = doc.select(".discover-horizontal-event-card")
 
         val events = mutableListOf<Events>()
 
@@ -43,11 +43,11 @@ class EventViewModel : ViewModel() {
 
             val imageUrl = container.selectFirst("img.event-card-image")?.attr("src") ?: "No image found"
 
-            val dateElement = container.selectFirst(".Typography_root__487rx.Typography_body-md-bold__487rx")
-            val date = dateElement?.text() ?: "No date found"
+            val locationElement = container.selectFirst(".event-card-details p:nth-of-type(2)")
+            val location = locationElement?.text() ?: "No date found"
 
-            val locationElement = container.selectFirst(".Typography_root__487rx.Typography_body-md__487rx.event-card__clamp-line--one.Typography_align-match-parent__487rx")
-            val location = locationElement?.text() ?: "No location found"
+            val dateElement = container.selectFirst(".Typography_root__487rx.Typography_body-md__487rx.event-card__clamp-line--one.Typography_align-match-parent__487rx")
+            val date = dateElement?.text() ?: "No location found"
 
             events.add(Events(title, link, imageUrl, date, location))
         }
@@ -55,4 +55,5 @@ class EventViewModel : ViewModel() {
         Log.d("events", events.toString())
         return events
     }
+
 }
