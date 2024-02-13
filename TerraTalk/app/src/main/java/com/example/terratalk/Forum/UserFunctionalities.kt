@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.MutableData
 import com.google.firebase.database.Transaction
+import java.util.UUID
 
 fun User.createPost(username: String, content: String, database: FirebaseDatabase, title: String){
 
@@ -85,20 +86,24 @@ fun User.commentPost(postId: String, database: FirebaseDatabase,  userId: String
 }
 
 
-fun Conversion(post: Post): Events{
+fun Conversion(post: Post, database: FirebaseDatabase): Events{
     return Events(
         title = post.title?: "",
+        link = "",
+        imageUrl = "",
         date = "",
         location = "",
+        database = database,
         eventId = post.postId
+
 
     )
 }
 
-fun PosttoEvent(allPosts: MutableList<Post>, listofUserEvents: MutableList<Events>){
+fun PosttoEvent(allPosts: MutableList<Post>, listofUserEvents: MutableList<Events>, database: FirebaseDatabase){
     for (post in allPosts){
         if (post.postLikes > 100 && post.postTag == PostTag.EVENT){
-            listofUserEvents.add(Conversion(post))
+            listofUserEvents.add(Conversion(post, database))
 
         }
     }

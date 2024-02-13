@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.terratalk.models.Events
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
@@ -23,7 +24,7 @@ class EventViewModel : ViewModel() {
         _eventItems.value = events
     }
 
-    suspend fun eventbriteParse(): List<Events> {
+    suspend fun eventbriteParse(database:FirebaseDatabase): List<Events> {
         val url = "https://www.eventbrite.ie/d/ireland--dublin/environmental/"
 
         val doc: Document = withContext(Dispatchers.IO) {
@@ -49,7 +50,7 @@ class EventViewModel : ViewModel() {
             val locationElement = container.selectFirst(".Typography_root__487rx.Typography_body-md__487rx.event-card__clamp-line--one.Typography_align-match-parent__487rx")
             val location = locationElement?.text() ?: "No location found"
 
-            events.add(Events(title, link, imageUrl, date, location))
+            events.add(Events(title, link, imageUrl, date, location, database))
         }
 
         Log.d("events", events.toString())
