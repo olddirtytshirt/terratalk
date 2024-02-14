@@ -23,20 +23,28 @@ import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import android.location.Location
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavController
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.compose.*
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun MapsPage(
     viewModel: MapsViewModel,
-    navController: NavController
+    navController: NavController,
+    fusedLocationProviderClient: FusedLocationProviderClient
 ) {
     val mapsState = viewModel.state.value
     val lastKnownLocation = mapsState.lastKnownLocation
+    val coroutineScope = rememberCoroutineScope()
     Scaffold(
         topBar = {
             PageBar("//maps")
@@ -66,12 +74,24 @@ fun MapsPage(
             ) {
                 Button(
                     text = "vegan restaurants",
-                    modifier = Modifier
+                    modifier = Modifier.clickable {
+                        coroutineScope.launch {
+                            viewModel.getNearbyPlaces(
+                                listOf("vegan restaurant"),
+                                fusedLocationProviderClient
+                            )
+
+                        }
+                    }
 
                 )
                 Button(
                     text = "car recharge",
-                    modifier = Modifier
+                    modifier = Modifier.clickable {
+                        coroutineScope.launch{
+                        viewModel.getNearbyPlaces(listOf("car recharge"), fusedLocationProviderClient)
+                    }
+                    }
 
                 )
             }
@@ -81,17 +101,29 @@ fun MapsPage(
             ) {
                 Button(
                     text = "organic shops",
-                    modifier = Modifier
+                    modifier = Modifier.clickable {
+                        coroutineScope.launch {
+                        viewModel.getNearbyPlaces(listOf("organic shop"), fusedLocationProviderClient)
+                    }
+                    }
 
                 )
                 Button(
                     text = "recycle",
-                    modifier = Modifier
+                    modifier = Modifier.clickable {
+                        coroutineScope.launch{
+                        viewModel.getNearbyPlaces(listOf("recycle"), fusedLocationProviderClient)
+                    }
+                    }
 
                 )
                 Button(
                     text = "parks",
-                    modifier = Modifier
+                    modifier = Modifier.clickable {
+                        coroutineScope.launch{
+                        viewModel.getNearbyPlaces(listOf("parks"), fusedLocationProviderClient)
+                    }
+                    }
 
                 )
             }
@@ -123,10 +155,19 @@ fun Button(
 }
 
 private suspend fun CameraPositionState.centerOnLocation(
-    location: Location
-) = animate(
-    update = CameraUpdateFactory.newLatLngZoom(
-        LatLng(location.latitude, location.longitude),
-        15f
-    ),
-)
+    location: Location,
+    map: GoogleMap
+) {
+    animate(
+        update = CameraUpdateFactory.newLatLngZoom(
+            LatLng(location.latitude, location.longitude),
+            15f
+        ),
+    )
+
+    map.addMarker(
+        MarkerOptions(
+
+        )
+    )
+}
