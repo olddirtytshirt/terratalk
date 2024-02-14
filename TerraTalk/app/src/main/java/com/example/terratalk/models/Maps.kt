@@ -5,3 +5,5 @@ import android.location.Location
 data class Maps(
     val lastKnownLocation: Location?
 )
+
+

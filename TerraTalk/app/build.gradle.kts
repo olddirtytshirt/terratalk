@@ -124,6 +124,8 @@ dependencies {
 
     //hilt
     implementation("com.google.dagger:hilt-android:2.48")
+    implementation ("com.google.android.libraries.places:places:2.4.0")
+    implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
