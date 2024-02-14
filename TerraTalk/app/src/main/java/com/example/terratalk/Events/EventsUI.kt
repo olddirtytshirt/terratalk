@@ -82,15 +82,13 @@ fun EventsPage(
                     .padding(horizontal =  20.dp)
             ) {
                 items(eventItems) { event ->
-                    //if savedEventsList? is empty, it will crash the app
-                    //as you are trying to access a null list
                     EventsItem(
                         title = event.title,
                         location = event.location,
                         date = event.date,
                         imageURL = event.imageUrl,
                         link = event.link,
-                        isSaved = savedEventsList!!.contains(event.title),
+                        isSaved = savedEventsList?.contains(event.title) ?: false,
                         viewModel = viewModel
                     )
                 }

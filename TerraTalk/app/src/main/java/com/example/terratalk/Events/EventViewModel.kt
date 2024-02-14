@@ -145,12 +145,11 @@ class EventViewModel : ViewModel() {
 
                 override fun onCancelled(error: DatabaseError) {
                     //handle error
-                    //return emptyList
-                    callback(emptyList())
+                    callback(null)
                 }
             })
         } else {
-            callback(emptyList())
+            callback(null)
         }
     }
 }

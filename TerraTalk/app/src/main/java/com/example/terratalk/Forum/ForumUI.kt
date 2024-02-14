@@ -1,57 +1,18 @@
 package com.example.terratalk.Forum
 
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import com.example.terratalk.models.User
 import com.example.terratalk.ui.BottomNavigation
 import com.example.terratalk.ui.PageBar
-import com.google.firebase.database.FirebaseDatabase
-
-
-class PostViewModel : ViewModel() {
-    val user = User()
-
-    private val title1 = mutableStateOf("")
-    val title: State<String> = title1
-
-    private val content1 = mutableStateOf("")
-    val content: State<String> = content1
-
-    fun setTitle(newTitle: String) {
-        title1.value = newTitle
-    }
-
-    fun setContent(newContent: String) {
-        content1.value = newContent
-    }
-
-    fun createPost(database: FirebaseDatabase){
-        val username = user.username
-        val userId = user.userId
-        val content = content1.value
-        val title = title1.value
-        user.createPost(username, content, database, title)
-
-    }
-
-}
 
 
 
@@ -70,7 +31,12 @@ fun ForumPage (navController: NavController){
             modifier = Modifier
                 .padding(innerPadding)
         ) {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+            ) {
 
+            }
         }
 
     }
