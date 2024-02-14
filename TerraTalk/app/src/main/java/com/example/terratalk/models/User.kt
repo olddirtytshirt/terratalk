@@ -12,7 +12,8 @@ data class User (
     var token: String? = null,
     var status: String? = null,
     val postsCreated: MutableList<Post> = mutableListOf(),
-    val eventsSaved: MutableList<Events> = mutableListOf()
+    val eventsSaved: MutableList<Events> = mutableListOf(),
+
 ) {
 
     constructor(firebaseUser: FirebaseUser) : this(
@@ -20,6 +21,8 @@ data class User (
         email = firebaseUser.email ?: "",
         userId = firebaseUser.uid,
     )}
+
+    // Method to add events to the user's saved events list
 
 /*
     fun setBio(bio: String) {
