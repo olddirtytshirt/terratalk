@@ -45,6 +45,7 @@ fun MapsPage(
     val mapsState = viewModel.state.value
     val lastKnownLocation = mapsState.lastKnownLocation
     val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
             PageBar("//maps")

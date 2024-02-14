@@ -20,11 +20,11 @@ data class User (
         username = firebaseUser.displayName ?: "",
         email = firebaseUser.email ?: "",
         userId = firebaseUser.uid,
-    )}
+    )
 
     // Method to add events to the user's saved events list
 
-/*
+
     fun setBio(bio: String) {
         this.bio = bio
 
@@ -52,4 +52,3 @@ data class User (
 
 
 }
-*/
