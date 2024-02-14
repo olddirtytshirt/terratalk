@@ -9,10 +9,8 @@ data class Events(
     val imageUrl: String,
     val date: String,
     val location: String,
-    var database: FirebaseDatabase,
-    val eventId: String = UUID.randomUUID().toString(),
-
 )
+
 
 var listofUserEvents: MutableList<Events> = mutableListOf()
 

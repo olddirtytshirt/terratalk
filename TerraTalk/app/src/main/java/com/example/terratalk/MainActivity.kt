@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity() {
         MainScope().launch {
             val newsItems1 = newsViewModel.parseIrishTimes()
             newsViewModel.setNewsItems(newsItems1)
-            val eventItems = eventsViewModel.eventbriteParse(database = FirebaseDatabase.getInstance())
+            val eventItems = eventsViewModel.eventbriteParse()
             eventsViewModel.setEventItems(eventItems)
 
         }

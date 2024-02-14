@@ -1,5 +1,6 @@
 package com.example.terratalk.Events
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,8 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Row
-import com.example.terratalk.Events.updateEventsinFirebase
-import com.example.terratalk.Events.saveEvent
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -43,24 +42,29 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material3.Icon
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.example.terratalk.models.User
-import com.google.firebase.database.FirebaseDatabase
-
 
 @Composable
 fun EventsPage(
     viewModel: EventViewModel,
     navController: NavController,
-    user: User,
-    database: FirebaseDatabase
 ) {
     val eventItemsState = viewModel.eventItems.observeAsState()
     val eventItems = eventItemsState.value ?: emptyList()
 
+    var savedEventsList by remember { mutableStateOf<List<String>?>(null) }
+
+    // Initialize savedEventsList with data from getEventsSavedForCurrentUser
+    LaunchedEffect(Unit) {
+        viewModel.getEventsSavedForCurrentUser { eventsList ->
+            savedEventsList = eventsList
+        }
+    }
+    //Log.d("SAVED EVENTS LIST", savedEventsList.toString())
     Scaffold(
         topBar = {
             PageBar("//events")
@@ -78,15 +82,16 @@ fun EventsPage(
                     .padding(horizontal =  20.dp)
             ) {
                 items(eventItems) { event ->
+                    //if savedEventsList? is empty, it will crash the app
+                    //as you are trying to access a null list
                     EventsItem(
                         title = event.title,
                         location = event.location,
                         date = event.date,
                         imageURL = event.imageUrl,
                         link = event.link,
-                        database = database,
-                        eventId = event.eventId,
-                        user = user,
+                        isSaved = savedEventsList!!.contains(event.title),
+                        viewModel = viewModel
                     )
                 }
             }
@@ -101,13 +106,11 @@ fun EventsItem(
     date: String,
     imageURL: String,
     link: String,
-    eventId: String,
-    user: User,
-    database: FirebaseDatabase
+    isSaved: Boolean,
+    viewModel: EventViewModel
 ) {
+    //Log.d("event saved? ", title + "      " + isSaved.toString() ?: "null")
     val handler = LocalUriHandler.current
-    var isSaved by remember { mutableStateOf(false) }
-
     val contrast =  1f //normal contrast
     val brightness = -80f //decrease brightness
     val colorMatrix = floatArrayOf(
@@ -127,6 +130,7 @@ fun EventsItem(
                 .fillMaxSize(),
             Alignment.BottomStart
         )  {
+            //Log.d("EVENT USER", user.toString())
             Image(
                 painter = rememberAsyncImagePainter(imageURL),
                 contentDescription = null,
@@ -140,7 +144,7 @@ fun EventsItem(
                         radiusY = 5.dp,
                         edgeTreatment = BlurredEdgeTreatment.Unbounded
                     ),
-                colorFilter = androidx.compose.ui.graphics.ColorFilter.colorMatrix(ColorMatrix(colorMatrix))
+                 colorFilter = androidx.compose.ui.graphics.ColorFilter.colorMatrix(ColorMatrix(colorMatrix))
             )
             /*
              *     The Box is split into 2 sub-boxes
@@ -157,6 +161,7 @@ fun EventsItem(
                 ,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
+                //the 33% box width
                 Box(
                     modifier = Modifier
                         .weight(0.33f)
@@ -177,7 +182,7 @@ fun EventsItem(
                     }
                 }
 
-                //
+                //the 67% box width
                 Box(
                     modifier = Modifier
                         .weight(0.67f)
@@ -205,39 +210,62 @@ fun EventsItem(
                     }
                 }
             }
-            IconButton(
-                onClick = {
-                          if (!isSaved){
-                              user.saveEvent(eventId, database)
-                          }
-                          else{
-                              isSaved = false
-                          }
-                        user.updateEventsinFirebase(database)
-                        isSaved = !isSaved
-                          },
-                modifier = Modifier.align(Alignment.TopEnd).padding(5.dp)
-            ) {
-                if(!isSaved) {
-                    Icon(
-                        imageVector = Icons.Outlined.BookmarkBorder, // Replace with your desired icon
-                        contentDescription = "save event",
-                        tint = Color.White,
-                        modifier = Modifier
-                            .size(30.dp)
-                    )
-                } else {
-                    Icon(
-                        imageVector = Icons.Outlined.Bookmark, // Replace with your desired icon
-                        contentDescription = "event saved",
-                        tint = Color.White,
-                        modifier = Modifier
-                            .size(30.dp)
-                    )
-                }
+
+            var savedState by remember { mutableStateOf(isSaved) }
+
+            //func to handle saving the event
+            val onSaveEvent: () -> Unit = {
+                viewModel.saveEvent(title)
+                savedState = true
             }
+
+            //func to handle removing the event
+            val onRemoveEvent: () -> Unit = {
+                viewModel.removeSaved(title)
+                savedState = false
+            }
+
+            BookmarkButton(
+                modifier = Modifier.align(Alignment.TopEnd).padding(5.dp),
+                isSaved = savedState,
+                onSaveEvent = onSaveEvent,
+                onRemoveEvent = onRemoveEvent
+            )
+
         }
     }
     //space articles apart
     Spacer(modifier = Modifier.height(10.dp))
+}
+
+@Composable
+fun BookmarkButton(
+    modifier: Modifier = Modifier,
+    isSaved: Boolean,
+    onSaveEvent: () -> Unit,
+    onRemoveEvent: () -> Unit
+) {
+    IconButton(
+        onClick = {
+            if (isSaved) {
+                onRemoveEvent()
+            } else {
+                onSaveEvent()
+            }
+        },
+        modifier = modifier
+    ) {
+        val icon = if (isSaved) {
+            Icons.Outlined.Bookmark
+        } else {
+            Icons.Outlined.BookmarkBorder
+        }
+
+        Icon(
+            imageVector = icon,
+            contentDescription = if (isSaved) "delete saved event" else "save event",
+            tint = Color.White,
+            modifier = Modifier.size(30.dp)
+        )
+    }
 }
