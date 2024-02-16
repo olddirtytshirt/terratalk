@@ -1,6 +1,7 @@
 package com.example.terratalk.Maps
 
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -14,37 +15,32 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
-import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
-import android.location.Location
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material3.Button
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.compose.*
-import kotlinx.coroutines.launch
+import com.example.terratalk.models.Place
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+
 
 
 @Composable
 fun MapsPage(
     viewModel: MapsViewModel,
     navController: NavController,
-    fusedLocationProviderClient: FusedLocationProviderClient
 ) {
     val mapsState = viewModel.state.value
     val lastKnownLocation = mapsState.lastKnownLocation
-    val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
             PageBar("//maps")
@@ -53,121 +49,107 @@ fun MapsPage(
             BottomNavigation(navController)
         }
     ) { innerPadding ->
-        //set user location
-        val userLocation = LatLng(lastKnownLocation!!.latitude, lastKnownLocation.longitude)
-        val mapProperties = MapProperties(
-            //only enable if user has accepted location permissions.
-            isMyLocationEnabled = lastKnownLocation != null,
-        )
-        val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition.fromLatLngZoom(userLocation, 13f)
-        }
+        // Check if location permission is granted
+        if (lastKnownLocation != null) {
+            // Set user location
+            val userLocation = LatLng(lastKnownLocation.latitude, lastKnownLocation.longitude)
 
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(horizontal = 20.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Button(
-                    text = "vegan restaurants",
-                    modifier = Modifier.clickable {
-                        coroutineScope.launch {
-                            viewModel.getNearbyPlaces(
-                                listOf("vegan restaurant"),
-                                fusedLocationProviderClient
-                            )
+            // Set places list
+            val places = mapsState.places
+            //Log.d("Maps Places", places.toString())
+            val mapProperties = MapProperties(
+                isMyLocationEnabled = true,
+            )
 
-                        }
-                    }
-
-                )
-                Button(
-                    text = "car recharge",
-                    modifier = Modifier.clickable {
-                        coroutineScope.launch{
-                        viewModel.getNearbyPlaces(listOf("car recharge"), fusedLocationProviderClient)
-                    }
-                    }
-
-                )
+            // Configure maps location to user location
+            val cameraPositionState = rememberCameraPositionState {
+                position = CameraPosition.fromLatLngZoom(userLocation, 13f)
             }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Button(
-                    text = "organic shops",
-                    modifier = Modifier.clickable {
-                        coroutineScope.launch {
-                        viewModel.getNearbyPlaces(listOf("organic shop"), fusedLocationProviderClient)
-                    }
-                    }
 
-                )
-                Button(
-                    text = "recycle",
-                    modifier = Modifier.clickable {
-                        coroutineScope.launch{
-                        viewModel.getNearbyPlaces(listOf("recycle"), fusedLocationProviderClient)
-                    }
-                    }
-
-                )
-                Button(
-                    text = "parks",
-                    modifier = Modifier.clickable {
-                        coroutineScope.launch{
-                        viewModel.getNearbyPlaces(listOf("parks"), fusedLocationProviderClient)
-                    }
-                    }
-
-                )
-            }
-            Spacer(modifier = Modifier.height(5.dp))
-
-            GoogleMap(
+            Column(
                 modifier = Modifier
-                    .clip(shape = RoundedCornerShape(20.dp))
-                    .fillMaxSize(),
-                properties = mapProperties,
-                cameraPositionState = cameraPositionState
+                    .padding(innerPadding)
+                    .padding(horizontal = 20.dp)
             ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Button(onClick = { viewModel.performSearchNearby("vegetarian_restaurant") }) {
+                        Text("Vegetarian Restaurants")
+                    }
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Button(onClick = { viewModel.performSearchNearby("park") }) {
+                        Text("Park")
+                    }
+                }
 
+                Map(
+                    properties = mapProperties,
+                    cameraPositionState = cameraPositionState,
+                    places = places
+                )
+            }
+        } else {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                //display a message or UI element informing the user about disabled location tracking
+                Text(
+                    text = "Location tracking is disabled or permission denied. Please enable location permissions to use this feature.",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp)
+                        .align(Alignment.CenterHorizontally),
+                    fontWeight = FontWeight.Medium
+                )
             }
         }
     }
 }
 
 
+
+//set up and configure map
 @Composable
-fun Button(
-    //onClick: onClick
-    text: String,
-    modifier: Modifier
+fun Map(
+    properties: MapProperties,
+    cameraPositionState: CameraPositionState,
+    places: List<Place>,
 ) {
-    OutlinedButton(onClick = {}) {
-        Text(text)
+    GoogleMap(
+        modifier = Modifier
+            .fillMaxSize()
+            .clip(RoundedCornerShape(20.dp)),
+        properties = properties,
+        cameraPositionState = cameraPositionState,
+    ) {
+        //iterate through each place object and place a market at each place location
+        places.forEach { place ->
+            place.location?.let { location ->
+                //depending on the type of place type, use different marker colours
+                val icon = if (place.types.contains("park")) {
+                    BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)
+                } else if (place.types.contains("restaurant")) {
+                    BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
+                } else {
+                    BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
+                }
+                //set location, title - place name, snipper - place address, icon
+                Marker(
+                    state = MarkerState(
+                        position = LatLng(
+                            location.latitude,
+                            location.longitude
+                        )
+                    ),
+                    title = place.displayName.text,
+                    snippet = place.formattedAddress,
+                    icon = icon
+                )
+            }
+        }
     }
-}
-
-private suspend fun CameraPositionState.centerOnLocation(
-    location: Location,
-    map: GoogleMap
-) {
-    animate(
-        update = CameraUpdateFactory.newLatLngZoom(
-            LatLng(location.latitude, location.longitude),
-            15f
-        ),
-    )
-
-    map.addMarker(
-        MarkerOptions(
-
-        )
-    )
 }

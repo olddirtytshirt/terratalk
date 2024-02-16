@@ -3,7 +3,8 @@ package com.example.terratalk.models
 import android.location.Location
 
 data class Maps(
-    val lastKnownLocation: Location?
+    val lastKnownLocation: Location?,
+    val places: List<Place>
 )
 
 

@@ -1,26 +1,26 @@
 package com.example.terratalk.Maps
 
 import android.annotation.SuppressLint
-import android.app.Application
+import android.content.pm.PackageManager.*
 import android.util.Log
-import android.content.Context
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.terratalk.BuildConfig.MAPS_API_KEY
+import com.example.terratalk.models.Location
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.model.TypeFilter
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
-import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse
-import com.google.android.libraries.places.api.net.PlacesClient
-import kotlinx.coroutines.Dispatchers
-import com.google.android.libraries.places.api.model.Place.Field
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import com.example.terratalk.models.Maps
-import com.google.android.gms.maps.model.LatLng
+import com.example.terratalk.models.Circle
+import com.example.terratalk.models.GeocodingResponse
+import com.example.terratalk.models.LocationRestriction
+import com.example.terratalk.models.NearbyPlacesRequest
+import com.example.terratalk.models.NearbyPlacesResponse
 
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 /*
@@ -31,24 +31,149 @@ https://github.com/mitchtabian/Google-Maps-Compose/blob/master/app/src/main/java
 */
 
 
-class MapsViewModel(application: Application): ViewModel() {
 
+class MapsViewModel(): ViewModel() {
+
+    //initialise Maps UI states (maps model)
     val state: MutableState<Maps> = mutableStateOf(
         Maps(
             lastKnownLocation = null,
+            places = emptyList()
         )
     )
 
-    private lateinit var placesClient: PlacesClient
-    private val applicationContext = application.applicationContext
+    //function that calls and fetches google maps nearby search api()
+    //parameters passed - a string with the place type we are looking for
+    fun performSearchNearby(query: String) {
+        val latitude = state.value.lastKnownLocation?.latitude ?: 0.0
+        val longitude = state.value.lastKnownLocation?.longitude ?: 0.0
 
-    init{
-        Places.initialize(applicationContext, "AIzaSyAVKv3GX58qS1jRcVY35wNrfneaS3hi2Tg")
-        placesClient = Places.createClient(applicationContext)
+        //define
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://places.googleapis.com/v1/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        //request we send to api
+        val request = NearbyPlacesRequest(
+            //place types we want to search for
+            includedTypes = listOf(query),
+            //maximum number of places to be returned
+            maxResultCount = 10,
+            //set location restriction to user location
+            locationRestriction = LocationRestriction(
+                circle = Circle(
+                    center = Location(
+                        latitude = latitude,
+                        longitude = longitude
+                    ),
+                    //search for places in a 3000m radius from the location
+                    radius = 3000.0
+                )
+            )
+        )
+
+
+        val service = retrofit.create(PlacesApiService::class.java)
+
+        //set up api call
+        val call: Call<NearbyPlacesResponse> = service.searchNearby(request)
+
+        //make api call and get response
+        call.enqueue(object : Callback<NearbyPlacesResponse> {
+            override fun onResponse(call: Call<NearbyPlacesResponse>, response: Response<NearbyPlacesResponse>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    responseBody?.let { nearbyPlacesResponse ->
+                        val updatedMaps = state.value.copy(places = nearbyPlacesResponse.places)
+                        state.value = updatedMaps
+                    }
+                    //make call to geocoding api to convert formattedAddress to coordiantes
+                    responseBody?.places?.forEach { place ->
+                        //format the place id for the api
+                        val formattedPlaceId = place.name.substringAfter('/')
+                        //call convertPlaceIdToCoordinates for each place's formatted address
+                        convertPlaceIdToCoordinates(formattedPlaceId) { latitude, longitude ->
+                            //update the location for the current place
+                            val updatedPlaces = state.value.places.map { updatedPlace ->
+                                if (updatedPlace.name == place.name) {
+                                    updatedPlace.copy(location = Location(latitude, longitude))
+                                } else {
+                                    updatedPlace
+                                }
+                            }
+
+                            //set Maps UI state `places` to nearbyPlacesResponse from the api
+                            //this is for MapsUI so we can get places from the UI using viewModel.state
+                            state.value = state.value.copy(places = updatedPlaces)
+                        }
+
+
+                    }
+                    //to check responsebody in logcat
+                    Log.d("success", responseBody.toString())
+                } else {
+                    //to check errors in logcat
+                    Log.d("fail", response.toString())
+                }
+            }
+
+            override fun onFailure(call: Call<NearbyPlacesResponse>, t: Throwable) {
+                //to check errors in logcat
+                Log.d("fail2", t.toString())
+            }
+        })
+    }
+
+
+    //function that calls and fetches geocoding api to convert address to coordinates
+    //parameters passed:
+    //place id of the place we want to convert
+    //callback to the caller who called this func
+    fun convertPlaceIdToCoordinates(placeId: String, callback: (Double, Double) -> Unit) {
+        //secret
+        val apiKey = MAPS_API_KEY
+
+        //create a Retrofit service instance
+        val service = RetrofitClient.instance.create(GeocodingService::class.java)
+
+        //call the geocodePlaceId function with the place id and api key
+        service.geocode(placeId, apiKey).enqueue(object : Callback<GeocodingResponse> {
+            override fun onResponse(call: Call<GeocodingResponse>, response: Response<GeocodingResponse>) {
+                if (response.isSuccessful) {
+                    val geocodingResponse = response.body()
+                    //extract coordinates from the response
+                    val latitude = geocodingResponse?.results?.getOrNull(0)?.geometry?.location?.lat
+                    val longitude = geocodingResponse?.results?.getOrNull(0)?.geometry?.location?.lng
+
+                    //handle latitude and longitude values
+                    if (latitude != null && longitude != null) {
+                        //to check coordinates in logcat
+                        //val coordinates = "Latitude: $latitude, Longitude: $longitude"
+                        //Log.d("Coordinates", coordinates)
+
+                        // Pass the coordinates to the callback
+                        callback(latitude, longitude)
+                    } else {
+                        //null coordinates
+                        Log.d("Coordinates null", "Coordinates not found")
+                    }
+                } else {
+                    //to check errors
+                    Log.d("Geocoding Error",  response.toString())
+                }
+            }
+
+            override fun onFailure(call: Call<GeocodingResponse>, t: Throwable) {
+                //to check errors
+                Log.e("Geocoding Error", "Failed to execute geocoding request", t)
+            }
+        })
     }
 
 
 
+    //code from CODE REFERENCE mentioned above
     @SuppressLint("MissingPermission")
     fun getDeviceLocation(
         fusedLocationProviderClient: FusedLocationProviderClient
@@ -63,7 +188,7 @@ class MapsViewModel(application: Application): ViewModel() {
                 if (task.isSuccessful) {
                     state.value = state.value.copy(
                         lastKnownLocation = task.result,
-                        )
+                    )
                     //Log.d("lastKnownLocation", task.result.toString())
 
                 }
@@ -71,29 +196,5 @@ class MapsViewModel(application: Application): ViewModel() {
         } catch (e: SecurityException) {
             Log.e("getDeviceLocation", e.toString())
         }
-
-    }
-
-    suspend fun getNearbyPlaces(placeTypes: List<String>,fusedLocationProviderClient: FusedLocationProviderClient): List<LatLng>{
-        val location = fusedLocationProviderClient.lastLocation.await()
-        val request = FindCurrentPlaceRequest.builder(listOf(Place.Field.NAME, Place.Field.LAT_LNG))
-            .build()
-
-        val nearbylocations = mutableListOf<LatLng>()
-
-        withContext(Dispatchers.IO){
-            val response: FindCurrentPlaceResponse = placesClient.findCurrentPlace(request).await()
-            if(response?.placeLikelihoods != null){
-                for (placeLikelihood in response.placeLikelihoods){
-                    val place = placeLikelihood.place
-                    if (place.types?.intersect(placeTypes)?.isNotEmpty() == true){
-                        val placeLocation = LatLng(place.latLng!!.latitude, place.latLng!!.longitude)
-                        nearbylocations.add(placeLocation)
-                    }
-                }
-            }
-        }
-        return nearbylocations
     }
 }
-

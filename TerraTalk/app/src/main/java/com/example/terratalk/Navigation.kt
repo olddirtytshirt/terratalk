@@ -15,6 +15,7 @@ import com.example.terratalk.Maps.MapsViewModel
 import com.example.terratalk.Profile.ProfilePage
 import com.example.terratalk.Webscrapping.NewsPage
 import com.example.terratalk.Webscrapping.NewsViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
 
 
 @Composable

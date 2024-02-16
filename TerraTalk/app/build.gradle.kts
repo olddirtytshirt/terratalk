@@ -50,6 +50,7 @@ android {
         //turn jetpack compose on
         compose = true
         viewBinding = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -59,6 +60,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 
     secrets {
         // Optionally specify a different file name containing your secrets.
@@ -78,20 +80,28 @@ android {
 
 dependencies {
 
-    // Import the Firebase BoM
-    // When using the BoM, you don't specify versions in Firebase library dependencies
+    //firebase imports
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
     implementation("com.google.firebase:firebase-analytics")
 
-    implementation("androidx.compose.material:material-icons-extended:1.6.1")
-    implementation("androidx.core:core-ktx")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx")
-    implementation("androidx.activity:activity-compose")
+    //firebase database
+    implementation("com.google.firebase:firebase-database")
+    implementation("com.google.firebase:firebase-auth-ktx")
+
+
+    //android compose
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.1")
+    implementation("androidx.compose.material:material-icons-extended:1.6.1")
+
+
+    implementation("androidx.core:core-ktx")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx")
+    implementation("androidx.activity:activity-compose")
     implementation("org.jsoup:jsoup:1.14.3")
     implementation("androidx.compose.runtime:runtime-livedata:1.6.1")
     implementation("io.coil-kt:coil-compose:2.5.0")
@@ -99,14 +109,11 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:4.12.0")
     implementation ("androidx.appcompat:appcompat:1.6.1")
     implementation ("androidx.fragment:fragment-ktx:1.6.2")
-    implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
-    implementation("com.google.firebase:firebase-database-ktx:20.3.0")
+
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.7")
     implementation("androidx.room:room-ktx:2.6.1")
-    implementation("com.google.firebase:firebase-database:20.3.0")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
     //need this or MapEffect throws exception.
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -114,6 +121,7 @@ dependencies {
     //google maps
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.1.0")
+    implementation("com.google.maps:google-maps-services:0.15.0")
     //google maps for compose
     implementation("com.google.maps.android:maps-compose:2.8.0")
 
@@ -124,8 +132,18 @@ dependencies {
 
     //hilt
     implementation("com.google.dagger:hilt-android:2.48")
-    implementation ("com.google.android.libraries.places:places:2.4.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation ("com.google.android.libraries.places:places:3.3.0")
     implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
+
+    //retrofit - REST backend
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
+    // CONVERTER FOR RETROFIT (GSON)
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    //retrofit - convert JSON output to string
+    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

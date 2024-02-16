@@ -17,7 +17,6 @@ import com.example.terratalk.ui.theme.TerraTalkTheme
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -49,6 +48,7 @@ class MainActivity : ComponentActivity() {
             if (isGranted) {
                 mapsViewModel.getDeviceLocation(fusedLocationProviderClient)
             }
+
         }
 
     private fun askPermissions() = when {
@@ -77,10 +77,10 @@ class MainActivity : ComponentActivity() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         if (currentUser != null) {
-            // User is already logged in
+            //user is already logged in
             Log.d("Authentication", "User is already logged in. Email: ${currentUser.email}")
-            // Perform any additional actions if needed
             loggedIn = true
+
         } else {
             Log.d("Authentication", "User is not logged in")
         }
@@ -92,7 +92,6 @@ class MainActivity : ComponentActivity() {
             eventsViewModel.setEventItems(eventItems)
 
         }
-
         askPermissions()
         setContent {
             TerraTalkTheme {
