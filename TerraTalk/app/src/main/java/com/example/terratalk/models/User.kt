@@ -20,11 +20,14 @@ data class User (
         username = firebaseUser.displayName ?: "",
         email = firebaseUser.email ?: "",
         userId = firebaseUser.uid,
-    )}
+    )
 
     // Method to add events to the user's saved events list
 
-/*
+    /* code below causes app build errors, need to revise
+
+       need to set these in a viewModel with setValue() i think, like we set newsItems()
+
     fun setBio(bio: String) {
         this.bio = bio
 
@@ -51,5 +54,6 @@ data class User (
     }
 
 
+     */
+
 }
-*/
