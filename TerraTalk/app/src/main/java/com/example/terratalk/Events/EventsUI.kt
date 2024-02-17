@@ -47,24 +47,37 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
 fun EventsPage(
-    viewModel: EventViewModel,
+    viewModel1: EventViewModel,
     navController: NavController,
 ) {
-    val eventItemsState = viewModel.eventItems.observeAsState()
+    val eventItemsState = viewModel1.eventItems.observeAsState()
     val eventItems = eventItemsState.value ?: emptyList()
+
+    //initialising EventViewModel2 for when user is already logged in to fetch saved event data
+    val viewModel2 = viewModel<EventViewModel2>()
 
     var savedEventsList by remember { mutableStateOf<List<String>?>(null) }
 
-    // Initialize savedEventsList with data from getEventsSavedForCurrentUser
-    LaunchedEffect(Unit) {
-        viewModel.getEventsSavedForCurrentUser { eventsList ->
+    //add a flag that indicates for how long savedEvents are fetched from the database
+    val isLoadingSavedEvents = remember { mutableStateOf(true) }
+
+
+    //initialize savedEventsList with data from getEventsSavedForCurrentUser
+    //effect is recomposed everytime EventsPage is called.
+    LaunchedEffect(navController.currentBackStackEntryAsState().value) {
+        viewModel2.getEventsSavedForCurrentUser { eventsList ->
             savedEventsList = eventsList
+            isLoadingSavedEvents.value = false
         }
     }
+
     //Log.d("SAVED EVENTS LIST", savedEventsList.toString())
+
     Scaffold(
         topBar = {
             PageBar("//events")
@@ -77,25 +90,31 @@ fun EventsPage(
             modifier = Modifier
                 .padding(innerPadding)
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .padding(horizontal =  20.dp)
-            ) {
-                items(eventItems) { event ->
-                    EventsItem(
-                        title = event.title,
-                        location = event.location,
-                        date = event.date,
-                        imageURL = event.imageUrl,
-                        link = event.link,
-                        isSaved = savedEventsList?.contains(event.title) ?: false,
-                        viewModel = viewModel
-                    )
+            //if saved events are still being fetched
+            if (isLoadingSavedEvents.value) {
+                //wait until saved events are fetched
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(horizontal =   20.dp)
+                ) {
+                    items(eventItems) { event ->
+                        EventsItem(
+                            title = event.title,
+                            location = event.location,
+                            date = event.date,
+                            imageURL = event.imageUrl,
+                            link = event.link,
+                            isSaved = savedEventsList?.contains(event.title) ?: false,
+                            viewModel = viewModel2
+                        )
+                    }
                 }
             }
         }
     }
 }
+
 
 @Composable
 fun EventsItem(
@@ -105,7 +124,7 @@ fun EventsItem(
     imageURL: String,
     link: String,
     isSaved: Boolean,
-    viewModel: EventViewModel
+    viewModel: EventViewModel2
 ) {
     //Log.d("event saved? ", title + "      " + isSaved.toString() ?: "null")
     val handler = LocalUriHandler.current
