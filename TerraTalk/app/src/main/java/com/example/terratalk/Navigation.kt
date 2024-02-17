@@ -13,6 +13,7 @@ import com.example.terratalk.LoginRegister.SignInPreview
 import com.example.terratalk.Maps.MapsPage
 import com.example.terratalk.Maps.MapsViewModel
 import com.example.terratalk.Profile.ProfilePage
+import com.example.terratalk.Profile.ProfileViewModel
 import com.example.terratalk.Webscrapping.NewsPage
 import com.example.terratalk.Webscrapping.NewsViewModel
 
@@ -21,6 +22,7 @@ import com.example.terratalk.Webscrapping.NewsViewModel
 fun Navigation(newsViewModel: NewsViewModel,
                eventViewModel: EventViewModel,
                mapsViewModel: MapsViewModel,
+               profileViewModel: ProfileViewModel,
                askPermissions: () -> Unit,
                loggedin: Boolean
 ) {
