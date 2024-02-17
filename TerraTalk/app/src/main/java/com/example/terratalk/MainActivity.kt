@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.terratalk.Events.EventViewModel
 import com.example.terratalk.Maps.MapsViewModel
 import com.example.terratalk.Webscrapping.NewsViewModel
+import com.example.terratalk.Profile.ProfileViewModel
+import com.example.terratalk.models.StatusTag
 import com.example.terratalk.ui.theme.TerraTalkTheme
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -35,6 +37,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private val  mapsViewModel: MapsViewModel by viewModels()
+
+    private val  profileViewModel: ProfileViewModel by viewModels()
 
     private val  eventsViewModel: EventViewModel by viewModels()
 
@@ -61,6 +65,16 @@ class MainActivity : ComponentActivity() {
         else -> {
             requestPermissionLauncher.launch(ACCESS_FINE_LOCATION)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        profileViewModel.updateStatus(StatusTag.ACTIVE)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        profileViewModel.updateStatus(StatusTag.OFFLINE)
     }
 
 
@@ -99,6 +113,7 @@ class MainActivity : ComponentActivity() {
                     newsViewModel = newsViewModel,
                     eventViewModel = eventsViewModel ,
                     mapsViewModel = mapsViewModel,
+                    profileViewModel = profileViewModel,
                     loggedin = loggedIn
                 )
             }

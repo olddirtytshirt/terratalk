@@ -2,19 +2,26 @@ package com.example.terratalk.models
 
 import com.google.firebase.auth.FirebaseUser
 
-data class User (
+enum class StatusTag{
+    ACTIVE,
+    IDLE,
+    OFFLINE,
+}
+
+
+data class User(
     var username: String = "",
-    var email: String? = null,
+    var email: String? = "",
     val userId: String = "",
-    var profilePic: String? = null,
-    var bio: String? = null,
+    var profilePic: String = "",
+    var bio: String = "",
     var cover: String? = null,
     var token: String? = null,
-    var status: String? = null,
+    var status: StatusTag? = StatusTag.ACTIVE,
     val postsCreated: MutableList<Post> = mutableListOf(),
     val eventsSaved: MutableList<Events> = mutableListOf(),
 
-) {
+    ) {
 
     constructor(firebaseUser: FirebaseUser) : this(
         username = firebaseUser.displayName ?: "",

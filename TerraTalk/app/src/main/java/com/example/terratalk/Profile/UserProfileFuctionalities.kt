@@ -1,29 +1,48 @@
 package com.example.terratalk.Profile
-import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.terratalk.models.StatusTag
 import com.example.terratalk.models.User
-import com.google.firebase.Firebase
-//import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 
-//DONT DELETE JUST DOESNT WORK TOO WELL WILL FIX LATER
-/*
 class ProfileViewModel : ViewModel() {
-    //private val db = Firebase.firestore
 
-    fun updateUserProfile(user: User) {
-        db.collection("users").document(user.userId)
-            .set(user)
-            .addOnSuccessListener {
-                Log.d(TAG, "User profile updated successfully")
-            }
-            .addOnFailureListener { e ->
-                Log.w(TAG, "Error updating user profile", e)
-            }
+    val state: MutableState<User> = mutableStateOf(
+        User(
+            username = "",
+            email = null,
+            userId = "",
+            profilePic = "",
+            bio = "",
+            status = StatusTag.ACTIVE,
+            postsCreated = mutableListOf(),
+            eventsSaved = mutableListOf(),
+        )
+    )
+
+    private val currentUser = FirebaseAuth.getInstance().currentUser
+    private val database = FirebaseDatabase.getInstance().reference.child("users").child(currentUser?.uid ?: "")
+
+
+    fun updateUsername(newUsername: String){
+        state.value = state.value.copy(username = newUsername)
+        database.child("username").setValue(newUsername)
     }
 
-    companion object {
-        private const val TAG = "ProfileViewModel"
+    fun updateBio(newBio: String){
+        state.value = state.value.copy(bio = newBio)
+        database.child("bio").setValue(newBio)
     }
+
+    fun updateStatus(newStatus: StatusTag){
+        state.value = state.value.copy(status = newStatus)
+        database.child("status").setValue(newStatus)
+    }
+
+    
+
 }
-*/
+

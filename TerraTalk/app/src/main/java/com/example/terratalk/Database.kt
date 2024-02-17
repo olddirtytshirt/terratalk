@@ -2,7 +2,6 @@ package com.example.terratalk
 
 import android.util.Log
 import com.example.terratalk.models.User
-import com.example.terratalk.models.Post
 import com.google.firebase.Firebase
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase

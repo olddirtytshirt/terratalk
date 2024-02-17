@@ -18,7 +18,8 @@ import com.google.firebase.database.Transaction
 
 class ForumViewModel : ViewModel() {
 
-    val user = User()
+    private val currentUser = FirebaseAuth.getInstance().currentUser
+    private val database = FirebaseDatabase.getInstance()
 
     private val title1 = mutableStateOf("")
     val title: State<String> = title1
@@ -35,16 +36,13 @@ class ForumViewModel : ViewModel() {
     }
 
     fun createPost(database: FirebaseDatabase){
-        val username = user.username
-        val userId = user.userId
+        val username = currentUser?.username
+        val userId = currentUser?.userId
         val content = content1.value
         val title = title1.value
         user.createPost(username, content, title)
 
     }
-
-    private val currentUser = FirebaseAuth.getInstance().currentUser
-    private val database = FirebaseDatabase.getInstance()
 
 
     fun User.createPost(username: String, content: String, title: String){
