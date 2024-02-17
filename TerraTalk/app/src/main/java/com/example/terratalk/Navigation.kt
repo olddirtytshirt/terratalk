@@ -15,13 +15,13 @@ import com.example.terratalk.Maps.MapsViewModel
 import com.example.terratalk.Profile.ProfilePage
 import com.example.terratalk.Webscrapping.NewsPage
 import com.example.terratalk.Webscrapping.NewsViewModel
-import com.google.android.gms.location.FusedLocationProviderClient
 
 
 @Composable
 fun Navigation(newsViewModel: NewsViewModel,
                eventViewModel: EventViewModel,
                mapsViewModel: MapsViewModel,
+               askPermissions: () -> Unit,
                loggedin: Boolean
 ) {
     val navController = rememberNavController()
@@ -44,7 +44,8 @@ fun Navigation(newsViewModel: NewsViewModel,
         }
 
         composable(route = Screen.MapsPage.route) {
-            MapsPage(mapsViewModel, navController = navController)
+
+            MapsPage(mapsViewModel, navController = navController, askPermissions)
         }
 
         composable(route = Screen.ForumPage.route) {

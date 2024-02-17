@@ -37,9 +37,15 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 fun MapsPage(
     viewModel: MapsViewModel,
     navController: NavController,
+    askPermissions: () -> Unit
 ) {
+    //ask for location permissions
+    askPermissions()
+
     val mapsState = viewModel.state.value
     val lastKnownLocation = mapsState.lastKnownLocation
+
+    //Log.d("lastKnownLocation", lastKnownLocation.toString())
 
     Scaffold(
         topBar = {
@@ -98,7 +104,7 @@ fun MapsPage(
             ) {
                 //display a message or UI element informing the user about disabled location tracking
                 Text(
-                    text = "Location tracking is disabled or permission denied. Please enable location permissions to use this feature.",
+                    text = "Location tracking is disabled or permission denied. Please enable precise location permissions to use this feature.",
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(20.dp)

@@ -90,15 +90,16 @@ class MainActivity : ComponentActivity() {
             newsViewModel.setNewsItems(newsItems1)
             val eventItems = eventsViewModel.eventbriteParse()
             eventsViewModel.setEventItems(eventItems)
-
         }
-        askPermissions()
+
         setContent {
             TerraTalkTheme {
                 Navigation(
                     newsViewModel = newsViewModel,
                     eventViewModel = eventsViewModel ,
                     mapsViewModel = mapsViewModel,
+                    //pass askPermissions() func in Navigation to MapsPage
+                    askPermissions = this@MainActivity::askPermissions,
                     loggedin = loggedIn
                 )
             }
