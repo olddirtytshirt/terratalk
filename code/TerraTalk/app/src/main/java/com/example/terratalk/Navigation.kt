@@ -18,6 +18,7 @@ import com.example.terratalk.Profile.ProfileViewModel
 import com.example.terratalk.Webscrapping.NewsPage
 import com.example.terratalk.Webscrapping.NewsViewModel
 import com.example.terratalk.Forum.AddPost
+import com.example.terratalk.Forum.PostPage
 
 
 @Composable
@@ -61,12 +62,16 @@ fun Navigation(newsViewModel: NewsViewModel,
             AddPost(forumViewModel, navController = navController)
         }
 
+        composable(route = Screen.PostPage.route) {
+            PostPage(forumViewModel, navController = navController)
+        }
+
         composable(route = Screen.ProfilePage.route) {
             ProfilePage(profileViewModel, navController = navController)
         }
 
-    }
 
+    }
 }
 
 

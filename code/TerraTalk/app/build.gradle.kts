@@ -144,6 +144,7 @@ dependencies {
 
     //retrofit - convert JSON output to string
     implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+    implementation("androidx.wear.compose:compose-material:1.3.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

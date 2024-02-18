@@ -112,7 +112,7 @@ class ForumViewModel : ViewModel() {
         })
     }
 
-    fun User.likePost(postId: String, userId: String) {
+    fun likePost(postId: String, userId: String) {
         val postRef = database.getReference("posts/$postId")
 
 

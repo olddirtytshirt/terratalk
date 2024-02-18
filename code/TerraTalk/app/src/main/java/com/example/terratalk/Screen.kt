@@ -18,6 +18,7 @@ sealed class Screen(
     object MapsPage : Screen("MapsPage")
     object ForumPage : Screen("ForumPage")
     object AddPost : Screen("AddPostPage")
+    object PostPage : Screen("PostPast")
     object ProfilePage : Screen("ProfilePage")
 }
 

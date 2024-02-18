@@ -70,7 +70,7 @@ fun AddPost(
                         ) {
                             Icon(
                                 Icons.Filled.ArrowBackIosNew,
-                                contentDescription = "add post",
+                                contentDescription = "go back button",
                                 modifier = Modifier.size(25.dp)
                             )
                         }
