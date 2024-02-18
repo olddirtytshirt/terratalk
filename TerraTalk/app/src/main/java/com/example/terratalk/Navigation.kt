@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.terratalk.Events.EventViewModel
 import com.example.terratalk.Events.EventsPage
 import com.example.terratalk.Forum.ForumPage
+import com.example.terratalk.Forum.ForumViewModel
 import com.example.terratalk.LoginRegister.RegisterPreview
 import com.example.terratalk.LoginRegister.SignInPreview
 import com.example.terratalk.Maps.MapsPage
@@ -16,6 +17,7 @@ import com.example.terratalk.Profile.ProfilePage
 import com.example.terratalk.Profile.ProfileViewModel
 import com.example.terratalk.Webscrapping.NewsPage
 import com.example.terratalk.Webscrapping.NewsViewModel
+import com.example.terratalk.Forum.AddPost
 
 
 @Composable
@@ -23,6 +25,7 @@ fun Navigation(newsViewModel: NewsViewModel,
                eventViewModel: EventViewModel,
                mapsViewModel: MapsViewModel,
                profileViewModel: ProfileViewModel,
+               forumViewModel: ForumViewModel,
                askPermissions: () -> Unit,
                loggedin: Boolean
 ) {
@@ -51,11 +54,15 @@ fun Navigation(newsViewModel: NewsViewModel,
         }
 
         composable(route = Screen.ForumPage.route) {
-            ForumPage(navController = navController)
+            ForumPage(forumViewModel, navController = navController)
+        }
+
+        composable(route = Screen.AddPost.route) {
+            AddPost(forumViewModel, navController = navController)
         }
 
         composable(route = Screen.ProfilePage.route) {
-            ProfilePage(navController = navController)
+            ProfilePage(profileViewModel, navController = navController)
         }
 
     }

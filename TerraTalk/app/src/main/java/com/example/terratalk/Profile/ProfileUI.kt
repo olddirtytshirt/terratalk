@@ -23,7 +23,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
 @Composable
-fun ProfilePage(navController: NavController) {
+fun ProfilePage(
+    viewModel: ProfileViewModel,
+    navController: NavController
+) {
     val user = FirebaseAuth.getInstance().currentUser
 
     /*

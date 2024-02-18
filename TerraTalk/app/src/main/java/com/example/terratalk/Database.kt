@@ -53,7 +53,7 @@ class ReadandWrite {
 
      }
 
-     fun setStatus(status: String){
+      fun setStatus(status: String){
          this.status = status
 
      }

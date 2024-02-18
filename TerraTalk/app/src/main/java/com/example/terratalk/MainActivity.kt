@@ -11,6 +11,7 @@ import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.terratalk.Events.EventViewModel
+import com.example.terratalk.Forum.ForumViewModel
 import com.example.terratalk.Maps.MapsViewModel
 import com.example.terratalk.Webscrapping.NewsViewModel
 import com.example.terratalk.Profile.ProfileViewModel
@@ -39,6 +40,8 @@ class MainActivity : ComponentActivity() {
     private val  mapsViewModel: MapsViewModel by viewModels()
 
     private val  profileViewModel: ProfileViewModel by viewModels()
+
+    private val  forumViewModel: ForumViewModel by viewModels()
 
     private val  eventsViewModel: EventViewModel by viewModels()
 
@@ -113,6 +116,7 @@ class MainActivity : ComponentActivity() {
                     eventViewModel = eventsViewModel ,
                     mapsViewModel = mapsViewModel,
                     profileViewModel = profileViewModel,
+                    forumViewModel = forumViewModel,
                     //pass askPermissions() func in Navigation to MapsPage
                     askPermissions = this@MainActivity::askPermissions,
                     loggedin = loggedIn

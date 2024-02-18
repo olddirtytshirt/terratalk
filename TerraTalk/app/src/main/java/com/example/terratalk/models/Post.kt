@@ -2,23 +2,12 @@ package com.example.terratalk.models
 
 import java.util.UUID
 
-enum class PostTag{
-    RECIPIE,
-    SCIENCE,
-    POLITICS,
-    EVENT,
-    TRAVEL,
-    GARDENING,
-    DIY,
-    OTHER
-}
-
 data class Post(
-    val userName: String? = "",
+    val username: String? = "",
     var title: String? = "",
     var content: String = "",
+    var postTag: String = "",
     var postId: String = UUID.randomUUID().toString(),
-    val postTag: PostTag = PostTag.OTHER,
     var postLikes: Int = 0,
     val postComments: MutableList<Comment> = mutableListOf(),
     var numComments: Int = 0

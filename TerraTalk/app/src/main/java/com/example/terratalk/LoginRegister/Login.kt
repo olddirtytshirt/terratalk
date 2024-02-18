@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.example.terratalk.Screen
+import com.google.firebase.auth.UserProfileChangeRequest
 import java.util.Objects
 
 val auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -38,21 +39,37 @@ fun registerUser(email: String, password: String, username: String, navControlle
     auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                // get current user
+                //set current user
                 val user = auth.currentUser
                 if(user != null){
-                    //initialise Database
-                    val rw = ReadandWrite()
-                    rw.initialiseDb()
-                    //write new user in database
-                    rw.writeNewUser(username, email, user.uid)
-                    sendEmailVerification(context, navController)
+                    //set display name
+                    val profileUpdates = UserProfileChangeRequest.Builder()
+                        .setDisplayName(username)
+                        .build()
+
+                    user.updateProfile(profileUpdates)
+                        .addOnCompleteListener { profileUpdateTask ->
+                            if (profileUpdateTask.isSuccessful) {
+                                //display name updated successfully
+                                Log.d("Registration", "User profile updated.")
+                            } else {
+                                //failed to update display name
+                                Log.w("Registration", "Failed to update user profile.", profileUpdateTask.exception)
+                            }
+
+                            //initialise Database
+                            val rw = ReadandWrite()
+                            rw.initialiseDb()
+                            //write new user in database
+                            rw.writeNewUser(username, email, user.uid)
+                            sendEmailVerification(context, navController)
+                        }
                 }
 
             } else {
-                // log error in logcat
+                //log error in logcat
                 Log.w("Registration", "createUserWithEmail:failure", task.exception)
-                // pop up indicating error message
+                //pop up indicating error message
                 Toast.makeText(context, Objects.toString(task.exception!!.message), Toast.LENGTH_LONG).show()
             }
         }
