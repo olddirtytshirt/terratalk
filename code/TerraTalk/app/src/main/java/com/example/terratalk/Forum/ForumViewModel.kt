@@ -2,11 +2,11 @@ package com.example.terratalk.Forum
 
 import android.util.Log
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.terratalk.models.Comment
 import com.example.terratalk.models.Events
+import com.example.terratalk.models.Forum
 import com.example.terratalk.models.Post
 import com.example.terratalk.models.User
 import com.example.terratalk.models.allPosts
@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.MutableData
 import com.google.firebase.database.Transaction
+import com.google.firebase.database.ValueEventListener
 
 class ForumViewModel : ViewModel() {
 
@@ -36,6 +37,12 @@ class ForumViewModel : ViewModel() {
         Post(
             postTag = ""
             )
+    )
+
+    val stateForum: MutableState<Forum> = mutableStateOf(
+        Forum(
+            posts = emptyList()
+        )
     )
 
     val displayName = currentUser?.displayName
@@ -86,6 +93,25 @@ class ForumViewModel : ViewModel() {
         }
     }
 
+    fun fetchPosts() {
+        val databaseReference = FirebaseDatabase.getInstance().getReference("posts")
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val postList = mutableListOf<Post>()
+                for (postSnapshot in dataSnapshot.children) {
+                    val post = postSnapshot.getValue(Post::class.java)
+                    post?.let { postList.add(it) }
+                }
+                val updatedForum = stateForum.value.copy(posts = postList)
+                stateForum.value = updatedForum
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+
+            }
+        })
+    }
+
     fun User.likePost(postId: String, userId: String) {
         val postRef = database.getReference("posts/$postId")
 
@@ -98,7 +124,6 @@ class ForumViewModel : ViewModel() {
                 if (post == null || post.postId != postId) {
                     return Transaction.success(currentData)
                 }
-
 
                 post.postLikes += 1
 
