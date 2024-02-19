@@ -23,7 +23,6 @@ fun loginUser(email: String, password: String, context: Context, navController: 
                 } else {
                     Toast.makeText(context, "please verify your email", Toast.LENGTH_SHORT).show()
                 }
-
             } else {
                 // Login failed
                 Log.w("Login", "signInWithEmail:failure", task.exception)
@@ -59,7 +58,6 @@ fun registerUser(email: String, password: String, username: String, navControlle
 
                             //initialise Database
                             val rw = ReadandWrite()
-                            rw.initialiseDb()
                             //write new user in database
                             rw.writeNewUser(username, email, user.uid)
                             sendEmailVerification(context, navController)
@@ -73,12 +71,6 @@ fun registerUser(email: String, password: String, username: String, navControlle
                 Toast.makeText(context, Objects.toString(task.exception!!.message), Toast.LENGTH_LONG).show()
             }
         }
-}
-
-
-
-fun logOut() {
-    auth.signOut()
 }
 
 

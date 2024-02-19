@@ -1,7 +1,5 @@
 package com.example.terratalk.models
 
-import com.google.firebase.database.FirebaseDatabase
-import java.util.UUID
 
 data class Events(
     val title: String,
@@ -11,6 +9,4 @@ data class Events(
     val location: String,
 )
 
-
-var listofUserEvents: MutableList<Events> = mutableListOf()
 

@@ -21,6 +21,7 @@ import com.example.terratalk.Webscrapping.NewsPage
 import com.example.terratalk.Webscrapping.NewsViewModel
 import com.example.terratalk.Forum.AddPost
 import com.example.terratalk.Forum.PostPage
+import com.example.terratalk.models.StatusTag
 
 
 @Composable
@@ -44,7 +45,8 @@ fun Navigation(newsViewModel: NewsViewModel,
         }
 
         composable(route = Screen.NewsPage.route) {
-            NewsPage(newsViewModel, navController = navController)
+            NewsPage(newsViewModel, profileViewModel, navController = navController)
+
         }
 
         composable(route = Screen.EventsPage.route) {

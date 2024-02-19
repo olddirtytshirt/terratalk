@@ -92,7 +92,6 @@ class MainActivity : ComponentActivity() {
         val myAuth = FirebaseAuth.getInstance()
 
         super.onCreate(savedInstanceState)
-
         //get reference of current authenticated user
         //it can either be: authenticated user in specific app session, or null if user is not logged in
         val currentUser = myAuth.currentUser

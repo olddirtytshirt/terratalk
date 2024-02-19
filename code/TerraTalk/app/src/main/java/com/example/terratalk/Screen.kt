@@ -8,6 +8,12 @@ import androidx.compose.material.icons.filled.Newspaper
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 
+//file that defines the app screen routes
+//
+//
+//
+//
+
 sealed class Screen(
     val route: String
 ) {
@@ -23,6 +29,7 @@ sealed class Screen(
 }
 
 //used for bottom navigation, implemented in ui/utilsUI.kt
+
 sealed class BottomNavItem(
     var title: String,
     var icon: ImageVector,
