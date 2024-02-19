@@ -14,7 +14,8 @@ data class Post(
     var postLikes: Int = 0,
     val postComments: MutableList<Comment> = mutableListOf(),
     var numComments: Int = 0,
-    var timestamp: String = SimpleDateFormat("HH:mm, dd/MM/yy", Locale.getDefault()).format(Date())
+    var timestamp: String = SimpleDateFormat("HH:mm, dd/MM/yy", Locale.getDefault()).format(Date()),
+
 )
 
 val allPosts: MutableList<Post> = mutableListOf()

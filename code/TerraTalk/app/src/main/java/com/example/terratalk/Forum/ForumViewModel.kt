@@ -1,5 +1,6 @@
 package com.example.terratalk.Forum
 
+import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -20,7 +21,7 @@ import com.google.firebase.database.ValueEventListener
 
 class ForumViewModel : ViewModel() {
 
-    private val currentUser = FirebaseAuth.getInstance().currentUser
+    val currentUser = FirebaseAuth.getInstance().currentUser
     private val database = FirebaseDatabase.getInstance()
 
 
@@ -41,47 +42,35 @@ class ForumViewModel : ViewModel() {
 
     val stateForum: MutableState<Forum> = mutableStateOf(
         Forum(
-            posts = emptyList()
+            posts = emptyList(),
+            postId = ""
         )
     )
 
     val displayName = currentUser?.displayName
 
-    fun createPost(title: String, content: String, selectedOption: String){
-        if (displayName != null) {
-            //use the displayName
-            stateUser.value.username = displayName
-            statePost.value.title = title
-            statePost.value.content = content
-            statePost.value.postTag = selectedOption
-            //Log.d("UserProfile", "Display name is ${state.value.username}")
-        } else {
-            //cry
-            Log.w("UserProfile", "Display name is null")
-        }
-
-        if (currentUser != null) {
-            if (title.isNotEmpty() && content.isNotEmpty()) {
-                val newPost = Post(stateUser.value.username, title, statePost.value.content, statePost.value.postTag)
-                val postref = database.reference.child("posts")
-                val postkey = postref.push().key
-                Log.d("postKey", postkey ?: "null")
-                postkey?.let {
-                    postref.child(postkey).setValue(newPost)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                Log.d("PostCreation", "Post created successfully with key: $postkey")
-                            } else {
-                                Log.e("PostCreation", "Failed to create post", task.exception)
-                            }
+    fun createPost(title: String, content: String, selectedOption: String) {
+        if (displayName != null && currentUser != null) {
+            val newPost = Post(displayName, title, content, selectedOption)
+            val postRef = database.reference.child("posts").push() // Generate a unique key for the new post
+            val postId = postRef.key // Get the generated postId
+            if (postId != null) {
+                newPost.postId = postId // Assign the generated postId to the new post
+                postRef.setValue(newPost)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Log.d("PostCreation", "Post created successfully with id: $postId")
+                        } else {
+                            Log.e("PostCreation", "Failed to create post", task.exception)
                         }
-                }
+                    }
                 stateUser.value.postsCreated.add(newPost)
                 allPosts.add(newPost)
-                updateUserPostsinDatabase(postkey!!, newPost)
+                updateUserPostsinDatabase(postId, newPost)
             }
+        } else {
+            Log.w("UserProfile", "Display name is null or current user is null")
         }
-
     }
 
 
@@ -108,6 +97,94 @@ class ForumViewModel : ViewModel() {
 
             override fun onCancelled(databaseError: DatabaseError) {
 
+            }
+        })
+    }
+    fun setPostId(postID: String) {
+        stateForum.value.postId = postID
+    }
+
+    fun commentPost(postId: String, commentContent: String) {
+        val postRef = database.getReference("posts/$postId")
+
+        postRef.runTransaction(object : Transaction.Handler {
+            override fun doTransaction(currentData: MutableData): Transaction.Result {
+                val post = currentData.getValue(Post::class.java)
+
+                if (post == null || post.postId != postId) {
+                    return Transaction.success(currentData)
+                }
+
+                //increment the number of comments
+                post.numComments += 1
+
+                if(currentUser != null && displayName != null) {
+                    //create a new comment
+                    val newComment = Comment(commentContent, displayName, currentUser.uid)
+
+                    //add the new comment to the existing list of comments
+                    post.postComments.add(newComment)
+                }
+
+
+                //update the post in the database
+                currentData.value = post
+
+                return Transaction.success(currentData)
+            }
+
+            override fun onComplete(
+                error: DatabaseError?,
+                committed: Boolean,
+                currentData: DataSnapshot?
+            ) {
+                //transaction completion
+            }
+        })
+    }
+
+
+    fun deleteComment(postId: String, commentId: String) {
+        val postRef = database.getReference("posts/$postId")
+
+        postRef.runTransaction(object : Transaction.Handler {
+            override fun doTransaction(currentData: MutableData): Transaction.Result {
+                val post = currentData.getValue(Post::class.java)
+
+                if (post == null || post.postId != postId) {
+                    return Transaction.success(currentData)
+                }
+
+                //find the comment by its ID and remove it from the list
+                val commentToRemove = post.postComments.find { it.commentId == commentId }
+                if (commentToRemove != null) {
+                    post.postComments.remove(commentToRemove)
+                    //decrement the number of comments
+                    post.numComments -=  1
+                }
+
+                //update the post in the database
+                currentData.value = post
+
+                return Transaction.success(currentData)
+            }
+
+            override fun onComplete(
+                error: DatabaseError?,
+                committed: Boolean,
+                currentData: DataSnapshot?
+            ) {
+                //handle transaction completion
+                if (error != null) {
+                    //transaction failed, log the error
+                    Log.w(TAG, "Transaction failed.", error.toException())
+                } else if (!committed) {
+                    //transaction not committed, handle accordingly
+                    Log.d(TAG, "Transaction not committed.")
+                } else {
+                    //transaction committed successfully
+                    Log.d(TAG, "Transaction committed successfully.")
+                }
             }
         })
     }
@@ -139,39 +216,6 @@ class ForumViewModel : ViewModel() {
             }
         })
     }
-
-
-    fun User.commentPost(postId: String, userId: String, commentContent: String) {
-        val postRef = database.getReference("posts/$postId")
-
-
-        postRef.runTransaction(object : Transaction.Handler {
-            override fun doTransaction(currentData: MutableData): Transaction.Result {
-                val post = currentData.getValue(Post::class.java)
-
-
-                if (post == null || post.postId != postId) {
-                    return Transaction.success(currentData)
-                }
-
-
-                post.numComments += 1
-
-                val newcomment = Comment(commentContent, username, userId)
-                post.postComments.add(newcomment)
-                currentData.value = post
-                return Transaction.success(currentData)
-            }
-
-            override fun onComplete(
-                error: DatabaseError?,
-                committed: Boolean,
-                currentData: DataSnapshot?
-            ) {
-            }
-        })
-    }
-
 
     fun Conversion(post: Post): Events {
         return Events(

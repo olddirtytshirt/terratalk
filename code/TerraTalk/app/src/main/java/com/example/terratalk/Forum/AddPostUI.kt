@@ -1,7 +1,6 @@
 package com.example.terratalk.Forum
 
 import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
@@ -39,8 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.terratalk.Screen
-import com.example.terratalk.ui.BottomNavigation
-import com.example.terratalk.ui.PageBar
 
 
 @OptIn(ExperimentalMaterial3Api::class)

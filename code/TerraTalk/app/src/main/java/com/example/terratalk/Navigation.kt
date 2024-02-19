@@ -2,9 +2,11 @@ package com.example.terratalk
 
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.terratalk.Events.EventViewModel
 import com.example.terratalk.Events.EventsPage
 import com.example.terratalk.Forum.ForumPage
@@ -62,8 +64,14 @@ fun Navigation(newsViewModel: NewsViewModel,
             AddPost(forumViewModel, navController = navController)
         }
 
-        composable(route = Screen.PostPage.route) {
-            PostPage(forumViewModel, navController = navController)
+        composable(
+            route = "${Screen.PostPage.route}/{postId}",
+            arguments = listOf(navArgument("postId") {
+                type = NavType.StringType
+            })
+        ) { backStackEntry ->
+            val postId = backStackEntry.arguments?.getString("postId")
+            PostPage(forumViewModel, navController = navController, postId = forumViewModel.stateForum.value.postId)
         }
 
         composable(route = Screen.ProfilePage.route) {

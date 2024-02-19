@@ -53,7 +53,9 @@ fun ForumPage(
     viewModel.fetchPosts()
 
     val posts = viewModel.stateForum.value.posts
-    Log.d("fetched posts", posts.toString())
+    //Log.d("fetched posts", posts.toString())
+
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -90,11 +92,10 @@ fun ForumPage(
             ) {
                 items(posts) { post ->
                     PostItem(
+                        viewModel,
                         post,
-                        navController = navController
-                    ) { selectedPost ->
-                        //navController.navigate(Screen.PostPage.route + "/${post.postId}")
-                    }
+                        navController = navController,
+                    )
                 }
             }
         }
@@ -105,17 +106,17 @@ fun ForumPage(
 
 @Composable
 fun PostItem(
+    viewModel: ForumViewModel,
     post: Post,
     navController: NavController,
-    onItemClick: (Post) -> Unit
 ) {
     Column(
         modifier = Modifier
             .padding(vertical = 10.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(), // This ensures the row takes the full width available
-            horizontalArrangement = Arrangement.SpaceBetween // This will space the items evenly
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = post.username!!,
@@ -139,10 +140,15 @@ fun PostItem(
         ClickableText(
             text = AnnotatedString(post.title!!),
             style = TextStyle(
-                fontSize = 18.sp, // Set the font size to 18sp
-                fontWeight = FontWeight.Medium // Set the font weight to semi-bold
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium
             ),
-            onClick = { onItemClick(post)}
+            onClick = { clickedPost ->
+                Log.d("clickedPost", clickedPost.toString())
+                viewModel.setPostId(post.postId)
+                navController.navigate(Screen.PostPage.route + "/${post.postId}")
+            }
+
         )
         Row(
 

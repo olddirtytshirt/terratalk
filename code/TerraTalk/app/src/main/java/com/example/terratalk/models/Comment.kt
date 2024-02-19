@@ -4,9 +4,9 @@ import java.util.UUID
 
 
 data class Comment(
-    var commentId: String = UUID.randomUUID().toString(),
     var commentContent:String="",
-    var userName:String="",
-    var userid: String = ""
+    var username:String="",
+    var userid: String = "",
+    var commentId: String = UUID.randomUUID().toString(),
 
 )
