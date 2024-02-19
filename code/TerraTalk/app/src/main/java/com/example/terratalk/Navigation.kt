@@ -30,11 +30,11 @@ fun Navigation(newsViewModel: NewsViewModel,
                profileViewModel: ProfileViewModel,
                forumViewModel: ForumViewModel,
                askPermissions: () -> Unit,
-               loggedin: Boolean
+               loggedIn: Boolean
 ) {
     val navController = rememberNavController()
-    Log.d("loggedIn", loggedin.toString())
-    NavHost(navController = navController, startDestination = determineStartDestination(loggedin)) {
+    Log.d("loggedIn", loggedIn.toString())
+    NavHost(navController = navController, startDestination = determineStartDestination(loggedIn)) {
         composable(route = Screen.SignInPreview.route) {
             SignInPreview(navController = navController)
         }
@@ -69,8 +69,7 @@ fun Navigation(newsViewModel: NewsViewModel,
             arguments = listOf(navArgument("postId") {
                 type = NavType.StringType
             })
-        ) { backStackEntry ->
-            val postId = backStackEntry.arguments?.getString("postId")
+        ) {
             PostPage(forumViewModel, navController = navController, postId = forumViewModel.stateForum.value.postId)
         }
 

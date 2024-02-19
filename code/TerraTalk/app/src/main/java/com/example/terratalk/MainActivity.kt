@@ -58,6 +58,8 @@ class MainActivity : ComponentActivity() {
 
         }
 
+    //func that displays the location permission pop-up
+    //it is called only when in MapsUI/MapsPage
     private fun askPermissions() = when {
         ContextCompat.checkSelfPermission(
             this,
@@ -70,27 +72,35 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    //when user is in the app, status is set as ACTIVE
+    //status is stored in database, it dynamically changes whether user is online or not
     override fun onResume() {
         super.onResume()
         profileViewModel.updateStatus(StatusTag.ACTIVE)
     }
 
+    //when user is not currently in the app, status is set as OFFLINE
+    //stored in database
     override fun onPause() {
         super.onPause()
         profileViewModel.updateStatus(StatusTag.OFFLINE)
     }
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        //get instance of Firebase Authentication
         val myAuth = FirebaseAuth.getInstance()
 
         super.onCreate(savedInstanceState)
+
+        //get reference of current authenticated user
+        //it can either be: authenticated user in specific app session, or null if user is not logged in
         val currentUser = myAuth.currentUser
 
         //keep track is user is logged in already or not
         var loggedIn = false
 
+        //for location permission
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         if (currentUser != null) {
@@ -118,8 +128,9 @@ class MainActivity : ComponentActivity() {
                     profileViewModel = profileViewModel,
                     forumViewModel = forumViewModel,
                     //pass askPermissions() func in Navigation to MapsPage
+                    //this function is called in MapsUI/MapsPage
                     askPermissions = this@MainActivity::askPermissions,
-                    loggedin = loggedIn
+                    loggedIn = loggedIn
                 )
             }
         }

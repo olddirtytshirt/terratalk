@@ -1,7 +1,6 @@
 package com.example.terratalk.Forum
 
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,10 +16,8 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Comment
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.outlined.AddComment
-import androidx.compose.material.icons.outlined.Comment
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.rounded.Comment
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,6 +26,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
@@ -39,7 +38,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.wear.compose.material.ContentAlpha
 import com.example.terratalk.Screen
-import com.example.terratalk.models.Comment
 import com.example.terratalk.models.Post
 import com.example.terratalk.ui.BottomNavigation
 
@@ -143,33 +141,23 @@ fun PostItem(
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Medium
             ),
-            onClick = { clickedPost ->
-                Log.d("clickedPost", clickedPost.toString())
+            onClick = {
                 viewModel.setPostId(post.postId)
                 navController.navigate(Screen.PostPage.route + "/${post.postId}")
             }
 
         )
-        Row(
+        Row {
+            LikeButton(post = post, viewModel = viewModel)
 
-        ) {
-            IconButton(onClick = { /*TODO*/ }) {
-                Row()
-                {
-                    Icon(
-                        Icons.Outlined.FavoriteBorder,
-                        contentDescription = "like button",
-                        tint = Color.Black.copy(alpha = ContentAlpha.medium),
-
-                        )
-                    Text(post.postLikes.toString())
-                }
-
-            }
             Spacer(modifier = Modifier.width(5.dp))
 
-            IconButton(onClick = { /*TODO*/ }) {
-                Row() {
+            IconButton(onClick = {
+                    viewModel.setPostId(post.postId)
+                    navController.navigate(Screen.PostPage.route + "/${post.postId}")
+
+            }) {
+                Row {
                     Icon(
                         Icons.AutoMirrored.Outlined.Comment,
                         contentDescription = "comment button",
@@ -184,4 +172,23 @@ fun PostItem(
         Divider(modifier = Modifier.height(1.dp))
     }
 
+}
+
+
+@Composable
+fun LikeButton(post: Post, viewModel: ForumViewModel) {
+    //check is post is already liked
+    val isLiked by viewModel.isPostLiked(post.postId).observeAsState(initial = false)
+
+    IconButton(onClick = { viewModel.toggleLikePost(post.postId) }) {
+        Row {
+            Icon(
+                if (isLiked) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
+                contentDescription = "like button",
+                tint = if (isLiked) Color.Red.copy(alpha = ContentAlpha.medium) else Color.Black.copy(alpha = ContentAlpha.medium)
+            )
+            //display the number of likes
+            Text(post.postLikes.toString())
+        }
+    }
 }

@@ -1,6 +1,5 @@
 package com.example.terratalk.Forum
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -47,6 +46,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.wear.compose.material.ContentAlpha
 import com.example.terratalk.Screen
+import com.example.terratalk.models.Comment
+import com.example.terratalk.models.Post
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,6 +70,7 @@ fun PostPage(
 
     Scaffold(
         topBar = {
+            //top app bar
             TopAppBar(
                 title = {
                     Row(
@@ -88,6 +90,8 @@ fun PostPage(
                 }
             )
         },
+        //bottom app bar
+        //comment input field
         bottomBar = {
             BottomAppBar(
                 containerColor = Color.White
@@ -119,120 +123,26 @@ fun PostPage(
         }
     ) { innerPadding ->
         Column {
-            Surface() {
+            Surface {
                 LazyColumn(
                     modifier = Modifier
                         .padding(innerPadding)
                         .padding(horizontal = 20.dp)
                 ) {
+                    //display post body
                     item {
                         if (post != null) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text(
-                                    text = post.username!!,
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Light
-                                )
-
-                                Text(
-                                    text = post.timestamp,
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Light
-                                )
-
-                                Text(
-                                    text = post.postTag,
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Light
-                                )
-                            }
-                            Text(
-                                text = post.title!!,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 25.sp
-                            )
-                            Spacer(modifier = Modifier.height(5.dp))
-
-                            Text(
-                                text = post.content,
-                                fontSize = 16.sp,
-                                lineHeight = 22.sp
-
-                            )
-
-                            Spacer(modifier = Modifier.height(5.dp))
-
-                            Row() {
-                                IconButton(onClick = { /*TODO*/ }) {
-                                    Row()
-                                    {
-                                        Icon(
-                                            Icons.Outlined.FavoriteBorder,
-                                            contentDescription = "like button",
-                                            tint = Color.Black.copy(alpha = ContentAlpha.medium),
-
-                                            )
-                                        Text(post.postLikes.toString())
-                                    }
-
-                                }
-                                Spacer(modifier = Modifier.width(5.dp))
-
-                                Row() {
-                                    Icon(
-                                        Icons.AutoMirrored.Outlined.Comment,
-                                        contentDescription = "comment button",
-                                        tint = Color.Black.copy(alpha = ContentAlpha.medium),
-
-                                        )
-                                    Text(post.numComments.toString())
-                                }
-                            }
-
-                            Divider(modifier = Modifier.fillMaxWidth())
-
+                            displayPost(post = post, viewModel = viewModel)
 
                         } else {
                             Text("there was an error fetching the events, please retry")
                         }
                     }
+                    //display comments
                     item {
                         if(post != null) {
                             for(comment in post.postComments) {
-                                Text(
-                                    text = comment.username,
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Light
-
-                                )
-
-                                Text(
-                                    text = comment.commentContent,
-                                    fontSize = 16.sp,
-                                    lineHeight = 22.sp
-
-                                )
-
-                                //if current logged in user is the author of the comment, show delete comment option
-                                if(viewModel.currentUser!!.displayName == comment.username) {
-                                    ClickableText(
-                                        text = AnnotatedString("delete comment"),
-                                        style = TextStyle(
-                                            fontSize = 12.sp,
-                                            fontWeight = FontWeight.Light
-                                        ),
-                                        onClick = {
-                                            viewModel.deleteComment(postId, comment.commentId)
-                                        }
-                                    )
-                                }
-
-                                Divider(modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 5.dp))
+                                displayComment(comment, viewModel, postId)
                             }
                         }
                     }
@@ -243,5 +153,117 @@ fun PostPage(
     }
 }
 
+
+@Composable
+fun displayPost(
+    post: Post,
+    viewModel: ForumViewModel
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = post.username!!,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Light
+        )
+
+        Text(
+            text = post.timestamp,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Light
+        )
+
+        Text(
+            text = post.postTag,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Light
+        )
+    }
+    Text(
+        text = post.title!!,
+        fontWeight = FontWeight.Bold,
+        fontSize = 25.sp
+    )
+    Spacer(modifier = Modifier.height(5.dp))
+
+    Text(
+        text = post.content,
+        fontSize = 16.sp,
+        lineHeight = 22.sp
+
+    )
+
+    Spacer(modifier = Modifier.height(5.dp))
+
+    Row(verticalAlignment = Alignment.CenterVertically) {
+
+        LikeButton(post = post, viewModel = viewModel)
+
+        Spacer(modifier = Modifier.width(5.dp))
+
+        Row {
+            Icon(
+                Icons.AutoMirrored.Outlined.Comment,
+                contentDescription = "comment button",
+                tint = Color.Black.copy(alpha = ContentAlpha.medium),
+
+                )
+            Text(post.numComments.toString())
+        }
+    }
+
+    Divider(modifier = Modifier.fillMaxWidth())
+
+}
+
+
+@Composable
+fun displayComment(
+    comment: Comment,
+    viewModel: ForumViewModel,
+    postId: String
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start
+    ) {
+        Text(
+            text = comment.username,
+            fontSize =  12.sp,
+            fontWeight = FontWeight.Light
+        )
+
+        // Add a Spacer with a flexible width
+        Spacer(modifier = Modifier.weight(1f))
+
+        //if current logged in user is the author of the comment, show delete comment option
+        if(viewModel.currentUser!!.displayName == comment.username) {
+            ClickableText(
+                text = AnnotatedString("delete comment"),
+                style = TextStyle(
+                    fontSize =  12.sp,
+                    fontWeight = FontWeight.Light
+                ),
+                onClick = {
+                    viewModel.deleteComment(postId, comment.commentId)
+                }
+            )
+        }
+    }
+
+    Text(
+        text = comment.commentContent,
+        fontSize = 16.sp,
+        lineHeight = 22.sp
+
+    )
+
+
+    Divider(modifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = 5.dp))
+}
 
 

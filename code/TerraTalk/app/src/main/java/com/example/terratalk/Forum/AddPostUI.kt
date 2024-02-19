@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
@@ -79,7 +80,7 @@ fun AddPost(
                 }
             )
         },
-        // other content
+        //other content
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -107,7 +108,7 @@ fun AddPost(
                 label = { Text("content") },
                 maxLines =   13,
                 keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Done
+                    imeAction = ImeAction.Default
                 ),
                 shape = RoundedCornerShape(25.dp),
                 modifier = Modifier
@@ -134,7 +135,7 @@ fun AddPost(
                     modifier = Modifier
                 ) {
                     Text(
-                        text = selectedOption, // Use the selectedOption variable here
+                        text = selectedOption,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                     )
