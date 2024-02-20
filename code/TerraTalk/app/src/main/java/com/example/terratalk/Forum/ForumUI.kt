@@ -28,6 +28,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
@@ -38,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.wear.compose.material.ContentAlpha
 import com.example.terratalk.Screen
+import com.example.terratalk.UserManager
 import com.example.terratalk.models.Post
 import com.example.terratalk.ui.BottomNavigation
 
@@ -147,7 +149,10 @@ fun PostItem(
             }
 
         )
-        Row {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+        ) {
             LikeButton(post = post, viewModel = viewModel)
 
             Spacer(modifier = Modifier.width(5.dp))
@@ -166,6 +171,23 @@ fun PostItem(
                     )
                     Text(post.numComments.toString())
                 }
+            }
+
+            //fill max space as possible
+            Spacer(modifier = Modifier.weight(1f))
+
+            //if current logged in user is the author of the post, show delete post option
+            if(UserManager.currentUser!!.displayName == post.username) {
+                ClickableText(
+                    text = AnnotatedString("delete post"),
+                    style = TextStyle(
+                        fontSize =  12.sp,
+                        fontWeight = FontWeight.Light
+                    ),
+                    onClick = {
+                        viewModel.deletePost(post.postId)
+                    }
+                )
             }
         }
         Spacer(modifier = Modifier.height(5.dp))

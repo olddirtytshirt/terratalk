@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.wear.compose.material.ContentAlpha
 import com.example.terratalk.Screen
+import com.example.terratalk.UserManager
 import com.example.terratalk.UserManager.currentUser
 import com.example.terratalk.models.Comment
 import com.example.terratalk.models.Post
@@ -212,6 +213,23 @@ fun displayPost(
 
                 )
             Text(post.numComments.toString())
+        }
+
+        //fill max space as possible
+        Spacer(modifier = Modifier.weight(1f))
+
+        //if current logged in user is the author of the post, show delete post option
+        if(UserManager.currentUser!!.displayName == post.username) {
+            ClickableText(
+                text = AnnotatedString("delete post"),
+                style = TextStyle(
+                    fontSize =  12.sp,
+                    fontWeight = FontWeight.Light
+                ),
+                onClick = {
+                    viewModel.deletePost(post.postId)
+                }
+            )
         }
     }
 

@@ -139,6 +139,45 @@ class ForumViewModel : ViewModel() {
     }
 
     //func to deleteComment
+    fun deletePost(postId: String) {
+        val postRef = database.getReference("posts/$postId")
+
+        postRef.runTransaction(object : Transaction.Handler {
+            override fun doTransaction(currentData: MutableData): Transaction.Result {
+                val post = currentData.getValue(Post::class.java)
+
+                if (post == null || post.postId != postId) {
+                    return Transaction.success(currentData)
+                }
+
+                // Since we are deleting the post, we don't need to find and remove a comment
+                // We can just remove the post data from the currentData
+                currentData.value = null
+
+                return Transaction.success(currentData)
+            }
+
+            override fun onComplete(
+                error: DatabaseError?,
+                committed: Boolean,
+                currentData: DataSnapshot?
+            ) {
+                //handle transaction completion
+                if (error != null) {
+                    //transaction failed, log the error
+                    Log.w(TAG, "Transaction failed.", error.toException())
+                } else if (!committed) {
+                    //transaction not committed, handle accordingly
+                    Log.d(TAG, "Transaction not committed.")
+                } else {
+                    //transaction committed successfully
+                    Log.d(TAG, "Transaction committed successfully.")
+                }
+            }
+        })
+    }
+
+    //func to deleteComment
     fun deleteComment(postId: String, commentId: String) {
         val postRef = database.getReference("posts/$postId")
 
@@ -224,7 +263,7 @@ class ForumViewModel : ViewModel() {
 
             val userId = currentUser!!.uid
 
-            userRef.child("savedPosts").child(postId).removeValue()
+            userRef.child("savedPosts").child(postId).setValue(postId)
                 .addOnSuccessListener {
                     Log.d("LikePost", "Post saved successfully for user: $userId")
                 }
