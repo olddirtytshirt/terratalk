@@ -21,10 +21,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -153,7 +153,7 @@ fun SignInScreen(
                 //loginUser is called
                 //
                 onDone = {
-                    isValid = isValidEmail(email)
+                    isValid = isValidEmail(email) && isValidPassword(password)
                     if(isValid) {
                         loginUser(email, password, context, navController)
                     }
@@ -182,8 +182,29 @@ fun SignInScreen(
                     }
                 }
             }
-
         )
+
+        Spacer(modifier = Modifier.height(15.dp))
+
+        Button(
+            //when button clicked, registerUser
+            onClick = {
+                isValid = isValidEmail(email) && isValidPassword(password)
+                if(isValid) {
+                    loginUser(email, password, context, navController)
+                }
+            },
+
+            ) {
+            Text(
+                text = "login",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        }
 
         if(!isValid) {
             Text(
@@ -192,7 +213,7 @@ fun SignInScreen(
                 modifier = Modifier.padding(8.dp)
             )
         }
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -206,7 +227,7 @@ fun SignInScreen(
                 modifier = Modifier.weight(1f)
             )
 
-            OutlinedButton(
+            Button(
                 onClick = {
                     navController.navigate(Screen.RegisterPreview.route)
                 },

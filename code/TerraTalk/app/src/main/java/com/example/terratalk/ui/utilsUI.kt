@@ -166,7 +166,11 @@ fun PasswordField(
         trailingIcon = trailingIcon,
         shape = RoundedCornerShape(30.dp),
         singleLine = true,
-        //supportingText = { Text(text = "password needs to be more than 6 characters long")}
+        supportingText = { Text(
+            text = "password needs to be at least than 6 characters long",
+            fontSize = 10.sp,
+        )
+        }
     )
 }
 
