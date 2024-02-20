@@ -47,8 +47,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.terratalk.Database.getEventsSavedForCurrentUser
+import com.example.terratalk.Database.removeSaved
+import com.example.terratalk.Database.saveEvent
 
 @Composable
 fun EventsPage(
@@ -58,8 +60,6 @@ fun EventsPage(
     val eventItemsState = viewModel1.eventItems.observeAsState()
     val eventItems = eventItemsState.value ?: emptyList()
 
-    //initialising EventViewModel2 for when user is already logged in to fetch saved event data
-    val viewModel2 = viewModel<EventViewModel2>()
 
     var savedEventsList by remember { mutableStateOf<List<String>?>(null) }
 
@@ -70,7 +70,7 @@ fun EventsPage(
     //initialize savedEventsList with data from getEventsSavedForCurrentUser
     //effect is recomposed everytime EventsPage is called.
     LaunchedEffect(navController.currentBackStackEntryAsState().value) {
-        viewModel2.getEventsSavedForCurrentUser { eventsList ->
+        getEventsSavedForCurrentUser { eventsList ->
             savedEventsList = eventsList
             isLoadingSavedEvents.value = false
         }
@@ -106,7 +106,6 @@ fun EventsPage(
                             imageURL = event.imageUrl,
                             link = event.link,
                             isSaved = savedEventsList?.contains(event.title) ?: false,
-                            viewModel = viewModel2
                         )
                     }
                 }
@@ -124,7 +123,6 @@ fun EventsItem(
     imageURL: String,
     link: String,
     isSaved: Boolean,
-    viewModel: EventViewModel2
 ) {
     //Log.d("event saved? ", title + "      " + isSaved.toString() ?: "null")
     val handler = LocalUriHandler.current
@@ -232,13 +230,13 @@ fun EventsItem(
 
             //func to handle saving the event
             val onSaveEvent: () -> Unit = {
-                viewModel.saveEvent(title)
+                saveEvent(title)
                 savedState = true
             }
 
             //func to handle removing the event
             val onRemoveEvent: () -> Unit = {
-                viewModel.removeSaved(title)
+                removeSaved(title)
                 savedState = false
             }
 

@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.wear.compose.material.ContentAlpha
 import com.example.terratalk.Screen
+import com.example.terratalk.UserManager.currentUser
 import com.example.terratalk.models.Comment
 import com.example.terratalk.models.Post
 
@@ -239,7 +240,7 @@ fun displayComment(
         Spacer(modifier = Modifier.weight(1f))
 
         //if current logged in user is the author of the comment, show delete comment option
-        if(viewModel.currentUser!!.displayName == comment.username) {
+        if(currentUser!!.displayName == comment.username) {
             ClickableText(
                 text = AnnotatedString("delete comment"),
                 style = TextStyle(

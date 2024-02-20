@@ -1,10 +1,10 @@
 package com.example.terratalk.LoginRegister
 
-import com.example.terratalk.ReadandWrite
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.navigation.NavController
+import com.example.terratalk.Database.writeNewUser
 import com.google.firebase.auth.FirebaseAuth
 import com.example.terratalk.Screen
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -56,10 +56,8 @@ fun registerUser(email: String, password: String, username: String, navControlle
                                 Log.w("Registration", "Failed to update user profile.", profileUpdateTask.exception)
                             }
 
-                            //initialise Database
-                            val rw = ReadandWrite()
                             //write new user in database
-                            rw.writeNewUser(username, email, user.uid)
+                            writeNewUser(username, email, user.uid)
                             sendEmailVerification(context, navController)
                         }
                 }

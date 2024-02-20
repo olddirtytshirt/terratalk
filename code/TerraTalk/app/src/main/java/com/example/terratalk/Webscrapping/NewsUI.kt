@@ -111,8 +111,8 @@ fun NewsItem(
                 modifier = Modifier
                     .weight(0.75f),
                 style = TextStyle(
-                    fontSize = 16.sp, // Set the font size to 18sp
-                    fontWeight = FontWeight.Medium // Set the font weight to semi-bold
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium
                 ),
                 onClick = { handler.openUri(link) }
             )

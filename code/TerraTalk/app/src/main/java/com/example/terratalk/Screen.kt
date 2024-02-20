@@ -10,9 +10,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 //file that defines the app screen routes
 //
-//
-//
-//
+
 
 sealed class Screen(
     val route: String

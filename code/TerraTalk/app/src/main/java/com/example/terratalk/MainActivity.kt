@@ -10,11 +10,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import com.example.terratalk.Database.updateStatus
 import com.example.terratalk.Events.EventViewModel
 import com.example.terratalk.Forum.ForumViewModel
 import com.example.terratalk.Maps.MapsViewModel
 import com.example.terratalk.Webscrapping.NewsViewModel
 import com.example.terratalk.Profile.ProfileViewModel
+import com.example.terratalk.UserManager.currentUser
 import com.example.terratalk.models.StatusTag
 import com.example.terratalk.ui.theme.TerraTalkTheme
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -76,14 +78,14 @@ class MainActivity : ComponentActivity() {
     //status is stored in database, it dynamically changes whether user is online or not
     override fun onResume() {
         super.onResume()
-        profileViewModel.updateStatus(StatusTag.ACTIVE)
+        updateStatus(StatusTag.ACTIVE)
     }
 
     //when user is not currently in the app, status is set as OFFLINE
     //stored in database
     override fun onPause() {
         super.onPause()
-        profileViewModel.updateStatus(StatusTag.OFFLINE)
+        updateStatus(StatusTag.OFFLINE)
     }
 
 
@@ -94,7 +96,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         //get reference of current authenticated user
         //it can either be: authenticated user in specific app session, or null if user is not logged in
-        val currentUser = myAuth.currentUser
 
         //keep track is user is logged in already or not
         var loggedIn = false
@@ -104,7 +105,7 @@ class MainActivity : ComponentActivity() {
 
         if (currentUser != null) {
             //user is already logged in
-            Log.d("Authentication", "User is already logged in. Email: ${currentUser.email}")
+            Log.d("Authentication", "User is already logged in. Email: ${currentUser!!.email}")
             loggedIn = true
 
         } else {

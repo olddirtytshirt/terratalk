@@ -7,13 +7,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.terratalk.Database.database
+import com.example.terratalk.Database.userRef
+import com.example.terratalk.UserManager.currentUser
+import com.example.terratalk.UserManager.stateUser
 import com.example.terratalk.models.Comment
 import com.example.terratalk.models.Forum
 import com.example.terratalk.models.Post
-import com.example.terratalk.models.User
 import com.example.terratalk.models.allPosts
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -23,23 +24,6 @@ import com.google.firebase.database.ValueEventListener
 
 class ForumViewModel : ViewModel() {
 
-    //getter for currentUser
-    val currentUser: FirebaseUser?
-        get() = FirebaseAuth.getInstance().currentUser
-
-    //getter for database
-    private val database: FirebaseDatabase
-        get() = FirebaseDatabase.getInstance()
-
-
-    //initialise User states
-    private val stateUser: MutableState<User> = mutableStateOf(
-        User(
-            username = "",
-            postsCreated = mutableListOf()
-        )
-    )
-
     //initialise Forum states
     val stateForum: MutableState<Forum> = mutableStateOf(
         Forum(
@@ -48,15 +32,11 @@ class ForumViewModel : ViewModel() {
         )
     )
 
-
     fun createPost(title: String, content: String, selectedOption: String) {
-        //get current user instance
-        val currentUserInstance = currentUser
-
         //is current user not null (is logged in) & the display name is not null
-        if (currentUserInstance != null && currentUserInstance.displayName != null) {
+        if (currentUser != null && currentUser!!.displayName != null) {
             //make new Post object
-            val newPost = Post(currentUserInstance.displayName, title, content, selectedOption)
+            val newPost = Post(currentUser!!.displayName, title, content, selectedOption)
             //get a database reference of children with value posts
             val postRef = database.reference.child("posts").push()
             //generate a unique key for the new post
@@ -74,7 +54,7 @@ class ForumViewModel : ViewModel() {
                     }
                 stateUser.value.postsCreated.add(newPost)
                 allPosts.add(newPost)
-                updateUserPostsinDatabase(postId, newPost)
+                updateUserPostsinDatabase(postId)
             }
         } else {
             Log.w("UserProfile", "Display name is null or current user is null")
@@ -82,11 +62,8 @@ class ForumViewModel : ViewModel() {
     }
 
 
-    private fun updateUserPostsinDatabase(postKey: String, newPost: Post) {
-        val currentUserInstance = currentUser
-        if (currentUserInstance != null) {
-            val usersRef = database.getReference("users")
-            val userRef = usersRef.child(currentUserInstance.uid)
+    private fun updateUserPostsinDatabase(postKey: String) {
+        if (currentUser!= null) {
             userRef.child("posts").setValue(postKey)
         }
     }
@@ -119,7 +96,6 @@ class ForumViewModel : ViewModel() {
     fun commentPost(postId: String, commentContent: String) {
         val postRef = database.getReference("posts/$postId")
         //store the user instance in a local variable
-        val currentUserInstance = currentUser
 
         postRef.runTransaction(object : Transaction.Handler {
             override fun doTransaction(currentData: MutableData): Transaction.Result {
@@ -132,16 +108,18 @@ class ForumViewModel : ViewModel() {
                 //increment the number of comments
                 post.numComments += 1
 
-                if (currentUserInstance != null && currentUserInstance.displayName != null) {
+                if (currentUser != null && currentUser!!.displayName != null) {
                     //create a new comment
                     val newComment = Comment(
                         commentContent,
-                        currentUserInstance.displayName!!,
-                        currentUserInstance.uid
+                        currentUser!!.displayName!!,
+                        currentUser!!.uid
                     )
 
                     //add the new comment to the existing list of comments
                     post.postComments.add(newComment)
+                } else {
+                    Log.w("UserProfile", "Display name is null or current user is null")
                 }
 
                 //update the post in the database
@@ -242,13 +220,11 @@ class ForumViewModel : ViewModel() {
 
         //add the post to the user's saved posts
         //store the user instance in a local variable
-        val currentUserInstance = currentUser
-        if (currentUserInstance != null) {
+        if (currentUser != null) {
 
-            val userId = currentUserInstance.uid
+            val userId = currentUser!!.uid
 
-            val userRef = database.getReference("users/$userId/savedPosts")
-            userRef.child(postId).setValue(true)
+            userRef.child("savedPosts").child(postId).removeValue()
                 .addOnSuccessListener {
                     Log.d("LikePost", "Post saved successfully for user: $userId")
                 }
@@ -293,8 +269,7 @@ class ForumViewModel : ViewModel() {
         })
 
         //remove the post from the user's saved posts
-        val userRef = database.getReference("users/$userId/savedPosts")
-        userRef.child(postId).removeValue()
+        userRef.child("savedPosts").child(postId).removeValue()
             .addOnSuccessListener {
                 Log.d("UnlikePost", "Post unliked and removed from saved posts for user: $userId")
             }
@@ -308,9 +283,8 @@ class ForumViewModel : ViewModel() {
     }
 
     fun toggleLikePost(postId: String) {
-        val currentUserInstance = currentUser
-        if (currentUserInstance != null) {
-            val userId = currentUserInstance.uid
+        if (currentUser != null) {
+            val userId = currentUser!!.uid
             val userRef = database.getReference("users/$userId/savedPosts")
 
             //check if the post is already in the user's saved posts
@@ -334,14 +308,15 @@ class ForumViewModel : ViewModel() {
                     )
                 }
             })
+        } else {
+            Log.w("UserProfile", "Display name is null or current user is null")
         }
     }
 
     fun isPostLiked(postId: String): LiveData<Boolean> {
         val isLiked = MutableLiveData<Boolean>()
-        val currentUser = currentUser
         if (currentUser != null) {
-            val userId = currentUser.uid
+            val userId = currentUser!!.uid
             val userRef = database.getReference("users/$userId/savedPosts")
 
             //check if the post is already in the user's saved posts
