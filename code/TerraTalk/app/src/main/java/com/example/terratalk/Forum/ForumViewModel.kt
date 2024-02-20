@@ -224,7 +224,7 @@ class ForumViewModel : ViewModel() {
     }
 
 
-    fun likePost(postId: String) {
+    fun likePost(postId: String, postTitle: String) {
 
         val postRef = database.getReference("posts/$postId")
 
@@ -263,7 +263,7 @@ class ForumViewModel : ViewModel() {
 
             val userId = currentUser!!.uid
 
-            userRef.child("savedPosts").child(postId).setValue(postId)
+            userRef.child("savedPosts").child(postId).setValue(postTitle)
                 .addOnSuccessListener {
                     Log.d("LikePost", "Post saved successfully for user: $userId")
                 }
@@ -321,7 +321,7 @@ class ForumViewModel : ViewModel() {
             }
     }
 
-    fun toggleLikePost(postId: String) {
+    fun toggleLikePost(postId: String, postTitle: String) {
         if (currentUser != null) {
             val userId = currentUser!!.uid
             val userRef = database.getReference("users/$userId/savedPosts")
@@ -334,7 +334,7 @@ class ForumViewModel : ViewModel() {
                         unlikePost(postId, userId)
                     } else {
                         //post is not liked, so like it
-                        likePost(postId)
+                        likePost(postId, postTitle)
 
                     }
                 }

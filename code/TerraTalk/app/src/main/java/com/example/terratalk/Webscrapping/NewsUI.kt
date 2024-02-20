@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.terratalk.Database.updateStatus
 import com.example.terratalk.Profile.ProfileViewModel
 import com.example.terratalk.models.StatusTag
 import com.example.terratalk.ui.BottomNavigation
@@ -38,11 +39,10 @@ import com.example.terratalk.ui.PageBar
 @Composable
 fun NewsPage(
     viewModel: NewsViewModel,
-    profile: ProfileViewModel,
     navController: NavController
 ) {
     //set status tag to active, as this is first page user sees when they log in
-    profile.updateStatus(StatusTag.ACTIVE)
+    updateStatus(StatusTag.ACTIVE)
 
     val newsItemsState = viewModel.newsItems.observeAsState(initial = emptyList())
     val newsItems = newsItemsState.value

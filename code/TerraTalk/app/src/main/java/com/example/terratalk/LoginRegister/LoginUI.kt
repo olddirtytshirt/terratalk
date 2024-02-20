@@ -153,7 +153,7 @@ fun SignInScreen(
                 //loginUser is called
                 //
                 onDone = {
-                    isValid = isValidEmail(email) && isValidPassword(password)
+                    isValid = isValidEmail(email)
                     if(isValid) {
                         loginUser(email, password, context, navController)
                     }
@@ -231,9 +231,10 @@ fun isValidEmail(email: String): Boolean {
     return matcher.matches()
 }
 
+
 // Here is validating password
 fun isValidPassword(pass: String?): Boolean {
-    return if (pass != null && pass.length > 6) {
+    return if (pass != null && pass.length > 5) {
         true
     } else false
 }

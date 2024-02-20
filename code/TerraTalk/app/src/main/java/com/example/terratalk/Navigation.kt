@@ -45,7 +45,7 @@ fun Navigation(newsViewModel: NewsViewModel,
         }
 
         composable(route = Screen.NewsPage.route) {
-            NewsPage(newsViewModel, profileViewModel, navController = navController)
+            NewsPage(newsViewModel, navController = navController)
 
         }
 
@@ -76,7 +76,7 @@ fun Navigation(newsViewModel: NewsViewModel,
         }
 
         composable(route = Screen.ProfilePage.route) {
-            ProfilePage(profileViewModel, navController = navController)
+            ProfilePage(profileViewModel, eventViewModel, forumViewModel, navController = navController)
         }
 
 

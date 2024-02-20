@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import com.example.terratalk.Database.writeNewUser
 import com.google.firebase.auth.FirebaseAuth
 import com.example.terratalk.Screen
+import com.example.terratalk.models.User
 import com.google.firebase.auth.UserProfileChangeRequest
 import java.util.Objects
 
@@ -58,6 +59,7 @@ fun registerUser(email: String, password: String, username: String, navControlle
 
                             //write new user in database
                             writeNewUser(username, email, user.uid)
+                            User()
                             sendEmailVerification(context, navController)
                         }
                 }

@@ -17,7 +17,7 @@ object Database {
         get() = FirebaseDatabase.getInstance()
 
     val userRef: DatabaseReference
-        get() = database.reference.child("users").child(UserManager.currentUser?.uid ?: "")
+        get() = database.reference.child("users").child(currentUser!!.uid)
 
 
     fun writeNewUser(username: String, email: String, userId: String) {
@@ -138,5 +138,38 @@ object Database {
         //if currentUser is not null, proceed with updating the status
         UserManager.stateUser.value = UserManager.stateUser.value.copy(status = newStatus)
         userRef.child("status").setValue(newStatus)
+    }
+
+    //function to retrieve liked posts for the current user
+    fun getLikedPostsForCurrentUser(callback: (List<String>?) -> Unit) {
+        if (currentUser != null) {
+            val likedPostsRef = userRef.child("savedPosts")
+
+            // Add a listener for a single value event
+            likedPostsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val likedPostsList = mutableListOf<String>()
+
+                    // Iterate over each child in the snapshot, which represents individual liked posts
+                    for (postSnapshot in snapshot.children) {
+                        val postId = postSnapshot.getValue(String::class.java)
+
+                        // If postId is not null, add to likedPostsList
+                        postId?.let {
+                            likedPostsList.add(it)
+                        }
+                    }
+
+                    callback(likedPostsList)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle error
+                    callback(null)
+                }
+            })
+        } else {
+            callback(null)
+        }
     }
 }

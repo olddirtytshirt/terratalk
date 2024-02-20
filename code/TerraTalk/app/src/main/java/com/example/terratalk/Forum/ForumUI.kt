@@ -202,7 +202,7 @@ fun LikeButton(post: Post, viewModel: ForumViewModel) {
     //check is post is already liked
     val isLiked by viewModel.isPostLiked(post.postId).observeAsState(initial = false)
 
-    IconButton(onClick = { viewModel.toggleLikePost(post.postId) }) {
+    IconButton(onClick = { viewModel.toggleLikePost(post.postId, post.title!!) }) {
         Row {
             Icon(
                 if (isLiked) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
