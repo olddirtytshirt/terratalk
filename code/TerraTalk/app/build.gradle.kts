@@ -76,6 +76,7 @@ android {
         ignoreList.add("keyToIgnore") // Ignore the key "keyToIgnore"
         ignoreList.add("sdk.*")       // Ignore all keys matching the regexp "sdk.*"
     }
+
 }
 
 dependencies {
@@ -142,12 +143,18 @@ dependencies {
     // CONVERTER FOR RETROFIT (GSON)
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    //retrofit - convert JSON output to string
-    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
     implementation("androidx.wear.compose:compose-material:1.3.0")
+
+
+    //mockito for mocking objects in unit tests
+    implementation("org.mockito:mockito-android:5.10.0")
+    implementation("org.mockito:mockito-core:5.10.0")
+    implementation("org.mockito:mockito-core:5.10.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    // Test helpers for LiveData
+    androidTestImplementation("android.arch.core:core-testing:1.1.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
