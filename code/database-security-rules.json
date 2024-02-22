@@ -1,0 +1,22 @@
+{
+    "rules": {
+      "users": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        "$userId": {
+          ".read": "auth != null && auth.uid == $userId",
+          ".write": "auth != null && auth.uid == $userId",
+          "eventsSaved": {
+            ".indexOn": ".value"
+          }
+        }
+      },
+      "posts": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        "$postId": {
+          ".validate": "newData.hasChildren(['title', 'content', 'username'])"
+        }
+      }
+    }
+  }

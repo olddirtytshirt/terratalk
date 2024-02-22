@@ -1,0 +1,121 @@
+{
+  "posts": {
+    "-Nr6Mga1W6mNTa-rP3-O": {
+      "content": "hi from the developers of terratalk\n\nwe are very excited to finally bring to you our app and we hope you enjoy it! \nplease write any feedback you have for us here and let us know your thoughts! thank you",
+      "numComments": 2,
+      "postComments": [
+        {
+          "commentContent": "helllooo",
+          "commentId": "800ae597-efe0-4b91-8759-3710c61683df",
+          "userid": "Lbtx7ssl5DOHCaXyUsVss7NIWiT2",
+          "username": "sidtherat"
+        },
+        {
+          "commentContent": "hi!",
+          "commentId": "4d55f0b9-45d8-486f-98a4-a39a5ac415c2",
+          "userid": "32Vo7M2TWCbmF0XY20Py7ZOxQkh1",
+          "username": "bingus"
+        }
+      ],
+      "postId": "-Nr6Mga1W6mNTa-rP3-O",
+      "postLikes": 3,
+      "postTag": "other",
+      "timestamp": "16:34, 20/02/24",
+      "title": "welcome to terratalk",
+      "username": "bingus"
+    },
+    "-Nr6UpKFqFfNybFYohLj": {
+      "content": "vegetarian restraunt ",
+      "numComments": 0,
+      "postId": "-Nr6UpKFqFfNybFYohLj",
+      "postLikes": 2,
+      "postTag": "other",
+      "timestamp": "17:10, 20/02/24",
+      "title": "I want more vegetraian restraunts",
+      "username": "zararatta"
+    },
+    "-Nr6VZwvp_qLAF-pkXWC": {
+      "content": "sid is a rat",
+      "numComments": 0,
+      "postId": "-Nr6VZwvp_qLAF-pkXWC",
+      "postLikes": 1,
+      "postTag": "recipe",
+      "timestamp": "17:13, 20/02/24",
+      "title": "sid",
+      "username": "staranisa"
+    }
+  },
+  "users": {
+    "32Vo7M2TWCbmF0XY20Py7ZOxQkh1": {
+      "dateCreated": "20 Feb, 2024",
+      "email": "madalina.tb02@gmail.com",
+      "eventsSaved": {
+        "-Nr6HYwzN8Xn8rrvbW1H": "Educating for Sustainability & EU GreenComp Framework",
+        "-Nr6HZdht7MHuHoqOuWT": "Dóchas at 50: Sustainable Development in a Time of Climate Crisis",
+        "-NrG4mhYhXPiy6UCvrj5": "Wind Farms and Wildlife - Protecting our Bay's Habitats",
+        "-NrG4vzViP9pbqMIRDZk": "The All-Ireland Water & Wastewater Conference & Exhibition",
+        "-NrG4wF3LbTSo-pmlzSD": "Conference: Nonhuman Animals in the Age of Extinction and Mass Production"
+      },
+      "posts": "-Nr6Mga1W6mNTa-rP3-O",
+      "savedPosts": {
+        "-Nr6Mga1W6mNTa-rP3-O": "welcome to terratalk",
+        "-Nr6UpKFqFfNybFYohLj": "I want more vegetraian restraunts",
+        "-Nr6VZwvp_qLAF-pkXWC": "sid"
+      },
+      "status": "OFFLINE",
+      "username": "bingus"
+    },
+    "FdM0lkS6AKZfI9cWmfrJNFKbcyk1": {
+      "dateCreated": "20 Feb, 2024",
+      "email": "zara.purewal2@mail.dcu.ie",
+      "eventsSaved": {
+        "-Nr6UWGVo1cxHV4NPyRl": "Wind Farms and Wildlife - Protecting our Bay's Habitats",
+        "-Nr6Us48CvZ9aiG6fg6e": "Eyes Off Data Summit 2024"
+      },
+      "posts": "-Nr6UpKFqFfNybFYohLj",
+      "savedPosts": {
+        "-Nr6Mga1W6mNTa-rP3-O": "welcome to terratalk",
+        "-Nr6UpKFqFfNybFYohLj": "I want more vegetraian restraunts"
+      },
+      "status": "OFFLINE",
+      "username": "zararatta"
+    },
+    "Lbtx7ssl5DOHCaXyUsVss7NIWiT2": {
+      "dateCreated": "20 Feb, 2024",
+      "email": "s.nandipaty@gmail.com",
+      "eventsSaved": {
+        "-Nr6O5rfUi8wlXviYIqX": "Educating for Sustainability & EU GreenComp Framework",
+        "-Nr6O75QLPZWEeIEaLd5": "Future in Pharmaceuticals Ireland 2024",
+        "-Nr6O7QABAebfo907hPt": "Soearth Eco Art Psychotherapy Spring School",
+        "-Nr6O7esBMs70r5Utqz4": "WRITER PAOLO DI PAOLO PRESENTS HIS BOOK “ROMANZO SENZA UMANI”"
+      },
+      "savedPosts": {
+        "-Nr6Mga1W6mNTa-rP3-O": "welcome to terratalk"
+      },
+      "status": "OFFLINE",
+      "username": "sidtherat"
+    },
+    "gTSGMyAEPHMCJaWOZ7iHBBMlYUi2": {
+      "dateCreated": "22 Feb, 2024",
+      "email": "madalina.triboi2@mail.dcu.ie",
+      "status": "ACTIVE",
+      "username": "test_user"
+    },
+    "jYiML1YIQaUkFge5MUrdzeTefS02": {
+      "dateCreated": "20 Feb, 2024",
+      "email": "zarapurewal@gmail.com",
+      "status": "ACTIVE",
+      "username": "zarapurewal"
+    },
+    "xc0b77ONaTb1Lp8YnjT0MZlq3io2": {
+      "dateCreated": "20 Feb, 2024",
+      "email": "anisa.hoxha4@mail.dcu.ie",
+      "eventsSaved": {
+        "-Nr6VanUBVOZNFdw9PXi": "Zoological: New Era"
+      },
+      "posts": "-Nr6VZwvp_qLAF-pkXWC",
+      "status": "OFFLINE",
+      "username": "staranisa"
+    }
+  }
+}
