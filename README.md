@@ -31,9 +31,6 @@ This application is aimed towards people who want to become more environmentally
 5. Plug the USB cable into your phone and your machine. A pop up will appear to allow permission for the machine (in this case, Android Studio) to debug apps on your phone. Allow it.
 6. After all the steps were completed successfully, the physical phone’s name will appear on the top bar of Android Studio or the Device Manager on the right side bar. Select your phone as the device to run the application on.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
 ## Authors
 Madalina Triboi, 3rd year Computer Science Student 
 <br>
