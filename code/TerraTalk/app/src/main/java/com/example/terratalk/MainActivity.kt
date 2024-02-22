@@ -29,12 +29,14 @@ import kotlinx.coroutines.launch
 /*
 CODE REFERENCES:
 location permission implementation
-https://github.com/mitchtabian/Google-Maps-Compose/blob/master/app/src/main/java/com/codingwithmitch/composegooglemaps/MapViewModel.kt
-
+https://github.com/mitchtabian/Google-Maps-Compose/blob/master/app/src/main/java/com/codingwithmitch/composegooglemaps/MapActivity.kt
 */
 
+//main entry point of the app
+
 class MainActivity : ComponentActivity() {
-    //viewModels
+    //initialise viewModels
+
     private val newsViewModel by lazy {
         ViewModelProvider(this).get(NewsViewModel::class.java)
     }
@@ -50,6 +52,7 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
+    //from code reference above
     private val requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -90,12 +93,8 @@ class MainActivity : ComponentActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        //get instance of Firebase Authentication
-        val myAuth = FirebaseAuth.getInstance()
 
         super.onCreate(savedInstanceState)
-        //get reference of current authenticated user
-        //it can either be: authenticated user in specific app session, or null if user is not logged in
 
         //keep track is user is logged in already or not
         var loggedIn = false
@@ -112,15 +111,19 @@ class MainActivity : ComponentActivity() {
             Log.d("Authentication", "User is not logged in")
         }
 
+        //main coroutine for ui components
         MainScope().launch {
+            //parse Irish Times for news
             val newsItems1 = newsViewModel.parseIrishTimes()
             newsViewModel.setNewsItems(newsItems1)
+            //parse Eventbrite for events
             val eventItems = eventsViewModel.eventbriteParse()
             eventsViewModel.setEventItems(eventItems)
         }
 
         setContent {
             TerraTalkTheme {
+                //pass all viewModels to navigation. Navigation manages app screens
                 Navigation(
                     newsViewModel = newsViewModel,
                     eventViewModel = eventsViewModel ,

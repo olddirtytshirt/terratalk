@@ -10,16 +10,20 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
+//file that manages some database reads and writes
+//defined in an object so there is only one instance of this file
+
 object Database {
 
     //getter for database
     val database: FirebaseDatabase
         get() = FirebaseDatabase.getInstance()
 
+    //user id reference for database, used across multiple files
     val userRef: DatabaseReference
         get() = database.reference.child("users").child(currentUser!!.uid)
 
-
+    //when user successfully registers, write them to database
     fun writeNewUser(username: String, email: String, userId: String) {
         val user = User(username, email)
 
@@ -40,6 +44,8 @@ object Database {
             val eventsSavedRef = userRef.child("eventsSaved")
 
             //check if the event already exists in the database, to avoid duplicates if there is any bug
+            //add a listener for a single value event
+            //this means that the listener will trigger once, fetching the current data at the location specified by the reference
             eventsSavedRef.orderByValue().equalTo(eventTitle).addListenerForSingleValueEvent(object :
                 ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -65,16 +71,18 @@ object Database {
         }
     }
 
-    //func that deletes the saved event in the database
+    //func that deletes the saved event from a specific user in the database
     fun removeSaved(eventTitle: String) {
         if (currentUser != null) {
             val eventsSavedRef = userRef.child("eventsSaved")
 
-            // Query the event to remove from the database
+            //query the event to remove from the database
             eventsSavedRef.orderByValue().equalTo(eventTitle)
+                //add a listener for a single value event
+                //this means that the listener will trigger once, fetching the current data at the location specified by the reference
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        // Loop through the snapshot and remove the event from the database
+                        //loop through the snapshot and remove the event from the database
                         for (eventSnapshot in snapshot.children) {
                             eventSnapshot.ref.removeValue()
                                 .addOnSuccessListener {
@@ -86,8 +94,8 @@ object Database {
                         }
                     }
 
-                    override fun onCancelled(error: DatabaseError) {
-                        Log.e("Event", "Failed to query event: $eventTitle", error.toException())
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        Log.e("Event", "Database error occurred: ${databaseError.message}")
                     }
                 })
         }
@@ -101,7 +109,6 @@ object Database {
             val eventsSavedRef = userRef.child("eventsSaved")
 
             //add a listener for a single value event
-            //this means that the listener will trigger once, fetching the current data at the location specified by the reference
             eventsSavedRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 //this method is called once when the data is successfully retrieved
                 //the snapshot contains the data at the time of the retrieval
@@ -123,6 +130,7 @@ object Database {
 
                 override fun onCancelled(error: DatabaseError) {
                     //handle error
+                    Log.e("Event", "Database error occurred: ${error.message}")
                     callback(null)
                 }
             })
@@ -165,6 +173,7 @@ object Database {
 
                 override fun onCancelled(error: DatabaseError) {
                     // Handle error
+                    Log.e("Event", "Database error occurred: ${error.message}")
                     callback(null)
                 }
             })

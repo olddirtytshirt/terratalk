@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Divider
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -29,9 +30,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.wear.compose.material.LocalContentAlpha
 import coil.compose.rememberAsyncImagePainter
 import com.example.terratalk.Database.updateStatus
-import com.example.terratalk.Profile.ProfileViewModel
 import com.example.terratalk.models.StatusTag
 import com.example.terratalk.ui.BottomNavigation
 import com.example.terratalk.ui.PageBar
@@ -106,13 +107,17 @@ fun NewsItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             //title takes up 75% of the row
+
+            //set clickable text color as per system light/dark mode settings
+            val color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
             ClickableText(
                 text = AnnotatedString(title),
                 modifier = Modifier
                     .weight(0.75f),
                 style = TextStyle(
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
+                    color = color
                 ),
                 onClick = { handler.openUri(link) }
             )

@@ -167,7 +167,7 @@ fun PasswordField(
         shape = RoundedCornerShape(30.dp),
         singleLine = true,
         supportingText = { Text(
-            text = "password needs to be at least than 6 characters long",
+            text = "password needs to be at least 6 characters long",
             fontSize = 10.sp,
         )
         }
@@ -189,9 +189,10 @@ fun BottomNavigation(navController: NavController) {
         BottomNavItem.ProfilePage
     )
 
-    // Determine the index of the current route
+    //determine the index of the current route
     val currentIndex = items.indexOfFirst { it.route == currentRoute }
-    // Update the selected item state based on the current route
+
+    //update the selected item state based on the current route
     if (currentIndex != -1) {
         selectedItem = currentIndex
     }

@@ -73,7 +73,6 @@ fun SignInScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
             .padding(start = 30.dp, top = 10.dp, end = 30.dp, bottom = 20.dp)
     ) {
         var email by remember { mutableStateOf("") }

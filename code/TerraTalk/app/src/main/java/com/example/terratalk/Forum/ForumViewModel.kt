@@ -32,6 +32,7 @@ class ForumViewModel : ViewModel() {
         )
     )
 
+
     fun createPost(title: String, content: String, selectedOption: String) {
         //is current user not null (is logged in) & the display name is not null
         if (currentUser != null && currentUser!!.displayName != null) {

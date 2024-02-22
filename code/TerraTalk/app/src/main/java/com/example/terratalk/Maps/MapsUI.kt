@@ -55,19 +55,19 @@ fun MapsPage(
             BottomNavigation(navController)
         }
     ) { innerPadding ->
-        // Check if location permission is granted
+        //check if location permission is granted
         if (lastKnownLocation != null) {
-            // Set user location
+            //set user location
             val userLocation = LatLng(lastKnownLocation.latitude, lastKnownLocation.longitude)
 
-            // Set places list
+            //set places list
             val places = mapsState.places
             //Log.d("Maps Places", places.toString())
             val mapProperties = MapProperties(
                 isMyLocationEnabled = true,
             )
 
-            // Configure maps location to user location
+            //configure maps location to user location
             val cameraPositionState = rememberCameraPositionState {
                 position = CameraPosition.fromLatLngZoom(userLocation, 13f)
             }

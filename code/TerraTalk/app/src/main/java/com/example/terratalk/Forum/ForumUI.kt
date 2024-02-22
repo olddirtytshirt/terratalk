@@ -22,6 +22,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -38,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.wear.compose.material.ContentAlpha
+import androidx.wear.compose.material.LocalContentAlpha
 import com.example.terratalk.Screen
 import com.example.terratalk.UserManager
 import com.example.terratalk.models.Post
@@ -50,6 +52,7 @@ fun ForumPage(
     viewModel: ForumViewModel,
     navController: NavController
 ){
+    //fetch forum posts from database
     viewModel.fetchPosts()
 
     val posts = viewModel.stateForum.value.posts
@@ -137,11 +140,14 @@ fun PostItem(
             )
         }
 
+        //set clickable text color as per system light/dark mode settings
+        val color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
         ClickableText(
             text = AnnotatedString(post.title!!),
             style = TextStyle(
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                color = color
             ),
             onClick = {
                 viewModel.setPostId(post.postId)

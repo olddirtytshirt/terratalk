@@ -21,6 +21,7 @@ import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -42,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.wear.compose.material.LocalContentAlpha
 import com.example.terratalk.Database
 import com.example.terratalk.Database.getLikedPostsForCurrentUser
 import com.example.terratalk.Events.EventViewModel
@@ -56,7 +58,6 @@ import com.example.terratalk.ui.PageBar
 fun ProfilePage(
     viewModel: ProfileViewModel,
     eventViewModel : EventViewModel,
-    forumViewModel: ForumViewModel,
     navController: NavController
 ) {
 
@@ -124,11 +125,16 @@ fun ProfilePage(
                     contentDescription = "sign out icon",
                 )
                 Spacer(modifier = Modifier.width(8.dp))
+
+                //set clickable text color as per system light/dark mode settings
+                val color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                 ClickableText(
                     text = AnnotatedString("sign out"),
                     style = TextStyle(
                         fontSize =  18.sp,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
+                        color = color
+
                     ),
                     onClick = {
                         viewModel.signOut()
@@ -222,14 +228,11 @@ fun ExpandableSavedEvents(
 @Composable
 fun ExpandableLikedPosts(
 ) {
-
     var expanded by remember { mutableStateOf(false) }
 
     var likedPosts by remember { mutableStateOf(emptyList<String>()) }
     /*
-    val posts by remember {
-        mutableStateOf(viewModel.stateForum.value.posts)
-    }
+
     Log.d("posts", posts.toString())
 
      */

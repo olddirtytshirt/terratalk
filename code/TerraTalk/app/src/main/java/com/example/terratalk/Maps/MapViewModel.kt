@@ -31,7 +31,6 @@ https://github.com/mitchtabian/Google-Maps-Compose/blob/master/app/src/main/java
 */
 
 
-
 class MapsViewModel(): ViewModel() {
 
     //initialise Maps UI states (maps model)

@@ -8,9 +8,7 @@ import androidx.compose.material.icons.filled.Newspaper
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 
-//file that defines the app screen routes
-//
-
+//file that defines the app screen routs and functions the UI functions to be called
 
 sealed class Screen(
     val route: String

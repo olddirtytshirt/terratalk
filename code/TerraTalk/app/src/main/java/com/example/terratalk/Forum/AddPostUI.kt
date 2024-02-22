@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
@@ -49,6 +48,8 @@ fun AddPost(
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
 
+
+    //post tag options for user to choose from
     val options = listOf("recipe", "science", "politics", "event", "travel", "gardening", "diy", "other")
 
     var expanded by remember { mutableStateOf(false) }

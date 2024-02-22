@@ -2,6 +2,7 @@ package com.example.terratalk.models
 
 import java.util.UUID
 
+//comments for posts
 
 data class Comment(
     var commentContent:String="",

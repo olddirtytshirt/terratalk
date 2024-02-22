@@ -21,8 +21,8 @@ import com.example.terratalk.Webscrapping.NewsPage
 import com.example.terratalk.Webscrapping.NewsViewModel
 import com.example.terratalk.Forum.AddPost
 import com.example.terratalk.Forum.PostPage
-import com.example.terratalk.models.StatusTag
 
+//file where we define app navigation and screen routes
 
 @Composable
 fun Navigation(newsViewModel: NewsViewModel,
@@ -34,38 +34,40 @@ fun Navigation(newsViewModel: NewsViewModel,
                loggedIn: Boolean
 ) {
     val navController = rememberNavController()
-    Log.d("loggedIn", loggedIn.toString())
+    //Log.d("loggedIn", loggedIn.toString())
+
     NavHost(navController = navController, startDestination = determineStartDestination(loggedIn)) {
+        //sign in screen
         composable(route = Screen.SignInPreview.route) {
             SignInPreview(navController = navController)
         }
-
+        //register screen
         composable(route = Screen.RegisterPreview.route) {
             RegisterPreview(navController = navController)
         }
-
+        //news page screen
         composable(route = Screen.NewsPage.route) {
             NewsPage(newsViewModel, navController = navController)
 
         }
-
+        //events page screen
         composable(route = Screen.EventsPage.route) {
             EventsPage(eventViewModel, navController = navController)
         }
-
+        //maps page screen
         composable(route = Screen.MapsPage.route) {
 
             MapsPage(mapsViewModel, navController = navController, askPermissions)
         }
-
+        //forum page screen
         composable(route = Screen.ForumPage.route) {
             ForumPage(forumViewModel, navController = navController)
         }
-
+        //add post screen
         composable(route = Screen.AddPost.route) {
             AddPost(forumViewModel, navController = navController)
         }
-
+        //single post page, proceeded by the post id to indicate which post
         composable(
             route = "${Screen.PostPage.route}/{postId}",
             arguments = listOf(navArgument("postId") {
@@ -74,17 +76,18 @@ fun Navigation(newsViewModel: NewsViewModel,
         ) {
             PostPage(forumViewModel, navController = navController, postId = forumViewModel.stateForum.value.postId)
         }
-
+        //profile page screen
         composable(route = Screen.ProfilePage.route) {
-            ProfilePage(profileViewModel, eventViewModel, forumViewModel, navController = navController)
+            ProfilePage(profileViewModel, eventViewModel, navController = navController)
         }
 
 
     }
 }
 
-
-
+//function that determines which screen to display first based on user authentication state
+//if not logged in, display sign in page
+//if logged in, show news page
 private fun determineStartDestination(isLoggedIn: Boolean): String {
     return if (isLoggedIn) {
         Screen.NewsPage.route

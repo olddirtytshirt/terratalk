@@ -65,32 +65,4 @@ class NewsViewModel : ViewModel() {
         }
         return newsItems
     }
-
-
-    /*
-     --- TO DO ---
-     fix image urls;
-    */
-    suspend fun parseTheJournal(): List<Triple<String, String, String>> {
-        val url = "https://www.thejournal.ie/climate-change/news/"
-        val doc: Document = withContext(Dispatchers.IO) {
-            Jsoup.connect(url).get()
-        }
-        val articleElements: List<Element> = doc.select("div.article-redesign")
-
-        val newsItems = mutableListOf<Triple<String, String, String>>()
-
-        for (article in articleElements) {
-            val titleElement = article.selectFirst("div.title-redesign")
-            val title = titleElement?.text() ?: "No title found"
-
-            val linkElement = article.selectFirst("a.link-overlay-redesign")
-            val link = linkElement?.attr("href") ?: "No link found"
-            val imageElement = article.parent()?.select("img")?.first()
-            val imageUrl = imageElement?.attr("src") ?: "No image found"
-
-            newsItems.add(Triple(title, link, imageUrl))
-        }
-        return newsItems
-    }
 }

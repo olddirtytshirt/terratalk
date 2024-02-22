@@ -18,16 +18,6 @@ import kotlinx.coroutines.withContext
 
 class ProfileViewModel : ViewModel() {
 
-
-
-    //initialise forum states
-    val stateForum: MutableState<Forum> = mutableStateOf(
-        Forum(
-            posts = emptyList(),
-            postId = ""
-        )
-    )
-
     //initialise User states
     val stateUser: MutableState<User> = mutableStateOf(
         User()
