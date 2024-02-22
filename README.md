@@ -8,13 +8,13 @@ This application is aimed towards people who want to become more environmentally
 
 ## Installation
 
-### 1 Minimum Requirements 
+### 1. Minimum Requirements 
 - [Android Studio Hedgehog (2023.1.1)](https://developer.android.com/studio)
 - [Android API/SDK](https://apilevels.com/) level 26 and above
 - Internet Connection
 - Android Software Development Kit (SDK) 1.8 (included when downloading Android Studio)
 
-### 1. Android Studio Configuration
+### 2. Android Studio Configuration
 1. Clone the repository to access our project.
 2. Download and install [Android Studio Hedgehog](https://developer.android.com/studio).
 3. Open Android Studio. 
