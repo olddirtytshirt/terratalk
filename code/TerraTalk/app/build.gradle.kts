@@ -94,30 +94,18 @@ dependencies {
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.runtime:runtime-livedata:1.6.1")
     implementation("androidx.compose.material:material-icons-extended:1.6.1")
+    implementation("androidx.wear.compose:compose-material:1.3.0")
 
-
-    implementation("androidx.core:core-ktx")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx")
-    implementation("androidx.activity:activity-compose")
     implementation("org.jsoup:jsoup:1.14.3")
-    implementation("androidx.compose.runtime:runtime-livedata:1.6.1")
     implementation("io.coil-kt:coil-compose:2.5.0")
-    implementation ("androidx.core:core-ktx:1.12.0")
     implementation ("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation ("androidx.appcompat:appcompat:1.6.1")
-    implementation ("androidx.fragment:fragment-ktx:1.6.2")
 
     implementation("androidx.navigation:navigation-compose:2.7.7")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.7")
-    implementation("androidx.room:room-ktx:2.6.1")
-
-    //need this or MapEffect throws exception.
-    implementation("androidx.appcompat:appcompat:1.6.1")
 
     //google maps
     implementation("com.google.android.gms:play-services-maps:18.2.0")
@@ -128,23 +116,12 @@ dependencies {
 
     //ktx for the Maps SDK for Android
     implementation("com.google.maps.android:maps-ktx:3.2.1")
-    //ktx for the Maps SDK for Android Utility Library
-    implementation("com.google.maps.android:maps-utils-ktx:3.2.1")
-
-    //hilt
-    implementation("com.google.dagger:hilt-android:2.48")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
-    implementation ("com.google.android.libraries.places:places:3.3.0")
-    implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
 
     //retrofit - REST backend
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
 
     // CONVERTER FOR RETROFIT (GSON)
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
-    implementation("androidx.wear.compose:compose-material:1.3.0")
-
 
     //mockito for mocking objects in unit tests
     implementation("org.mockito:mockito-android:5.10.0")
