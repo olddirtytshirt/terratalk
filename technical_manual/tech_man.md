@@ -2,36 +2,67 @@
 
 ## Table of Contents
 0. [Table of Contents](#table-of-contents)
+
 1. [Introduction](#introduction)
+
    1.1 [Overview](#overview)
+
    1.2 [Main functionalities](#main-functionalities)
+
    1.3 [Glossary](#glossary)
+
 2. [System Architecture](#system-architecture)
+
    2.1 [Architecture Design](#architecture-design)
+
       2.1.1 [Architecture Design Description](#architecture-design-description)
+
    2.2 [Client](#client)
+
       2.2.1 [User](#user)
+
       2.2.2 [User Interface](#user-interface)
+
       2.2.3 [Android App](#android-app)
+
       2.2.4 [External APIS/Data](#external-apisdata)
+
       2.2.5 [Firebase Realtime Database](#firebase-realtime-database)
+
 3. [High Level Design](#high-level-design)
+
    3.1 [Context Diagram](#context-diagram)
+
       3.1.1 [Context Diagram Description](#context-diagram-description)
+
    3.2 [Data Flow Diagram For User Authentication](#data-flow-diagram-for-user-authentication)
+
       3.2.1 [Data Flow Diagram For User Authentication Description](#data-flow-diagram-for-user-authentication-description)
+
    3.2 [Data Flow Diagram For Application Interaction](#data-flow-diagram-for-application-interaction)
+
       3.2.1 [Data Flow Diagram For Application Interaction Description](#data-flow-diagram-for-application-interaction-description)
+
 4. [Problems and Resolution](#problems-and-resolution)
+
    4.1 [Issues with Online Emulation](#issues-with-online-emulation)
+
    4.2 [Fetching Data for Events](#fetching-data-for-events)
+
    4.3 [Implementing Google Maps APIs](#implementing-google-maps-apis)
+
 5. [Installation Guide](#installation-guide)
+
    5.1 [Minimum Requirements](#minimum-requirements)
+
    5.2 [Android Studio Configuration](#android-studio-configuration)
+
    5.3 [Setting up physical device](#setting-up-physical-device)
+
 6. [Testing](#testing)
+
    6.1 [Unit Testing](#unit-testing)
+   
    6.2 [User Testing](#user-testing)
 
 ## 1. Introduction
