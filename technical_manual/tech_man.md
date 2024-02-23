@@ -20,7 +20,7 @@
       3.1.1 [Context Diagram Description](#context-diagram-description)
    3.2 [Data Flow Diagram For User Authentication](#data-flow-diagram-for-user-authentication)
       3.2.1 [Data Flow Diagram For User Authentication Description](#data-flow-diagram-for-user-authentication-description)
-    3.2 [Data Flow Diagram For Application Interaction](#data-flow-diagram-for-application-interaction)
+   3.2 [Data Flow Diagram For Application Interaction](#data-flow-diagram-for-application-interaction)
       3.2.1 [Data Flow Diagram For Application Interaction Description](#data-flow-diagram-for-application-interaction-description)
 4. [Problems and Resolution](#problems-and-resolution)
    4.1 [Issues with Online Emulation](#issues-with-online-emulation)
