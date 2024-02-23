@@ -195,5 +195,5 @@ There were two sections for the user testing, the first being questions that pro
 As you can see in the attached user survey results most users were able to perform the tasks given to them under the time constraints. From personal feedback given we were able to change certain aspects of the application so that it would be easier for the users to navigate. An example of this is the Log In page, some users were confused to how to submit their username and email because we failed to put in a button to confirm information. With the useful insights that user testing gave us we were able to correct this. 
 
 Here below is the link for the results of our User Testing:
-[text](https://docs.google.com/spreadsheets/d/1BDWowhkgfbhZxxH8h4VVIFwy6StClsZSpzXVL_ngwhI/edit?resourcekey#gid=1435804414)
+[link to user testing](https://docs.google.com/spreadsheets/d/1BDWowhkgfbhZxxH8h4VVIFwy6StClsZSpzXVL_ngwhI/edit?resourcekey#gid=1435804414)
 
