@@ -62,7 +62,7 @@
 6. [Testing](#6-testing)
 
    6.1 [Unit Testing](#61-unit-testing)
-   
+
    6.2 [User Testing](#62-user-testing)
 
 
@@ -130,42 +130,42 @@ Firebase Realtime Database is how we are storing all of our data; it is connecte
 #### 3.1.1 Context Diagram Description
 This shows how the application interacts with external systems at a high level. We can see that the application uses other existing data from scrapped websites and from APIs but does not change or modify any information. The only system that can cause changes within the application is the user.
 
-### Data Flow Diagram For User Authentication
+### 3.2 Data Flow Diagram For User Authentication
 
 ![User Authentication](images/logging_in.jpeg)
 
-#### Description
+#### 3.2.1 Description
 The above diagram offers a more detailed depiction of the data flow specifically when a user undergoes authentication within our system. It identifies the Guest and User as external entities, with 5 different app processes: Check Username and password, Complete Registration, Send Email Verification Email, Generate Error Message and Log In; and one Data Store entity that stores User Account information. The arrows indicate the data that is passed between the processes.
 
-### Data Flow Diagram For Application Interaction
+### 3.3 Data Flow Diagram For Application Interaction
 
 ![Application interaction](images/application_interaction.jpeg)
 
-#### Description
+#### 3.3.1 Description
 The above diagram offers a more detailed depiction of the data flow specifically when a user undergoes authentication within our system. It identifies the Guest and User as external entities, with 5 different app processes: Check Username and password, Complete Registration, Send Email Verification Email, Generate Error Message and Log In; and one Data Store entity that stores User Account information. The arrows indicate the data that is passed between the processes.
 
-## Problems and Resolution
-### Issues with Online Emulation
+## 4. Problems and Resolution
+### 4.1 Issues with Online Emulation
 A common problem that we ran into was that the virtual device emulators provided on Android Studio took a very long time to emulate our app and oftentimes would crash because the program would exit on account of how long it was taking. We initially tried to solve this issue by wiping the data or performing cold boots on the online emulator but neither worked for very long and the problem persisted.
 We solved this by using USB debugging with a physical device, by connecting a USB cable to our android phone and running the app directly on the phone. This proved to be much easier for us to visualize the layout of the app since it was now on an actual phone so it greatly aided us not only in saving time with testing but also to allow us to create a more user-oriented UI.
 
-### Fetching Data for Events
+### 4.2 Fetching Data for Events
 Another issue we ran into was trying to fetch event information using the Eventbrite API, we were using the ‘search’ function which allows us to search the public events and get a returned paginated response of those events. We implemented the functionality but we kept on getting errors showing us that we were not fetching properly.
 When we went through the documentation again more thoroughly we noticed that this function had been deprecated and we needed to find another way of retrieving information about the events.
 Similarly to our News page we used web scraping using Jsoup to retrieve public data form the Eventbrite website and implemented our events page similar to how we implemented our news page. Even though initially doing the wrong implementation by switching from using the API to using web scraping we reused a lot of the same code which allowed us to integrate the UI better because we just needed to recycle some code from the news page.
 
-### Implementing Google Maps APIs
+### 4.3 Implementing Google Maps APIs
 Using Google Maps APIs proved more tricky than expected, as there was little documentation about how to implement API calls for Android Development. It took us a lot of trial and error to correctly set up the API calls and responses. One issue when implementing the API was that we were getting API responses but the data we were getting was null. It took us a while to figure out that the parameters specifying our response data class needed to have the same name as in the API callback. For example, our parameter for API response data class was latitude; but the API parameter for that was lat. That was producing null results as obviously, latitude wasn’t a valid response.
 Google Maps Nearby Search API, which we use to find places based on user location, doesn’t have some of the options we wanted to implement in our project proposal, such as organic markets, bike recharging points or recycle points. We had to restrict ourselves only to vegetarian restaurants and parks, which are well defined labels in the API.
 
-## Installation Guide
-### Minimum Requirements
+## 5. Installation Guide
+### 5.1 Minimum Requirements
 - Android Studio Hedgehog (2023.1.1)
 - Android API/SDK level 26 and above
 - Internet Connection
 - Android Software Development Kit (SDK) 1.8 (included when downloading Android Studio)
 
-### Android Studio Configuration
+### 5.2 Android Studio Configuration
 1. Clone the repository to access our project.
 2. Download and install Android Studio Hedgehog.
 3. Open Android Studio.
@@ -174,21 +174,21 @@ Google Maps Nearby Search API, which we use to find places based on user locatio
 6. Set up your emulator or physical Android device to run the application. Android Studio comes with a default emulator already installed. However, we recommend using a physical device as it runs more smoothly, though that depends on the availability of an Android Phone. To set up a physical phone, follow steps in section 5.3.
 7. Run the application with the green play button on the top app bar.
 
-### Setting up physical device
+### 5.3 Setting up physical device
 1. Ensure you have a functional Android Phone that supports Android API/SDK level 26 and above; and a USB cable.
 2. If your device does not have developer settings turned on, go to Settings > About Device or About Phone > Scroll to Kernel or Build Number and tap on it 7 times.
 3. Go back to your device settings and search for “USB debugging” and turn it on.
 4. Plug the USB cable into your phone and your machine. A pop up will appear to allow permission for the machine (in this case, Android Studio) to debug apps on your phone. Allow it.
 5. After all the steps were completed successfully, the physical phone’s name will appear on the top bar of Android Studio or the Device Manager on the right side bar. Select your phone as the device to run the application on.
 
-## Testing
-### Unit Testing
+## 6 Testing
+### 6.1 Unit Testing
 We have implemented some unit tests testing the email & password validation functionality. However, we struggled due to time constraints to test other parts of our application as it contains a lot of external services and it doesn’t contain local functions.
 
-### Functionality Testing
+### 6.2 Functionality Testing
 All parts of the app have been thoroughly tested by us and ensured that the application doesn’t bug or crash unexpectedly. We ensured that the user can successfully: register, log in, go to news links, save/unsave events, be prompted with a location permission request, look for vegetarian restaurants, parks; access the forum and its contents, add a post, delete the post if they’re the author, like/unlike posts, add comments; check their saved events & liked posts, sign out.
 
-### User Testing
+### 6.3 User Testing
 We've opted to initiate user testing to gain deeper insights into how our application performs in the hands of real users. This approach helps us identify potential technical and non-technical issues. Prior to participation, users were required to complete a consent form. To maintain anonymity, their responses were collected through a Google Forms survey.
 There were two sections for the user testing, the first being questions that prompted the user to finish a task within a certain amount of time for example: Verify your email address in under 20 seconds. The second section was more opinion based questions where the users could rate certain aspects of the application based on their own experiences.
 
