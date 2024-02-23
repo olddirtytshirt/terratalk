@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.example.terratalk.app-mergeDebugResources-79:/values-port/values-port.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\sirin\\.gradle\\caches\\transforms-3\\c602c0bdce6d3ee5b6b136b244481b98\\transformed\\appcompat-1.6.1\\res\\values-port\\values-port.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "55",
+                        "endOffsets": "106"
+                    }
+                }
+            ]
+        }
+    ]
+}
