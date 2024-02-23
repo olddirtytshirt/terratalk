@@ -2,36 +2,67 @@
 
 ## Table of Contents
 0. [Table of Contents](#table-of-contents)
+
 1. [Introduction](#1-introduction)
+
    1.1 [Overview](#11-overview)
+
    1.2 [Main functionalities](#12-main-functionalities)
+
    1.3 [Glossary](#13-glossary)
+
 2. [System Architecture](#2-system-architecture)
+
    2.1 [Architecture Design](#21-architecture-design)
+
       2.1.1 [Architecture Design Description](#211-architecture-design-description)
+
    2.2 [Client](#22-client)
+
       2.2.1 [User](#221-user)
+
       2.2.2 [User Interface](#222-user-interface)
+
       2.2.3 [Android App](#223-android-app)
+
       2.2.4 [External APIS/Data](#224-external-apisdata)
+
       2.2.5 [Firebase Realtime Database](#225-firebase-realtime-database)
+
 3. [High Level Design](#3-high-level-design)
+
    3.1 [Context Diagram](#31-context-diagram)
+
       3.1.1 [Context Diagram Description](#311-context-diagram-description)
+
    3.2 [Data Flow Diagram For User Authentication](#32-data-flow-diagram-for-user-authentication)
+
       3.2.1 [Data Flow Diagram For User Authentication Description](#321-data-flow-diagram-for-user-authentication-description)
+
    3.3 [Data Flow Diagram For Application Interaction](#33-data-flow-diagram-for-application-interaction)
+
       3.3.1 [Data Flow Diagram For Application Interaction Description](#331-data-flow-diagram-for-application-interaction-description)
+
 4. [Problems and Resolution](#4-problems-and-resolution)
+
    4.1 [Issues with Online Emulation](#41-issues-with-online-emulation)
+
    4.2 [Fetching Data for Events](#42-fetching-data-for-events)
+
    4.3 [Implementing Google Maps APIs](#43-implementing-google-maps-apis)
+
 5. [Installation Guide](#5-installation-guide)
+
    5.1 [Minimum Requirements](#51-minimum-requirements)
+
    5.2 [Android Studio Configuration](#52-android-studio-configuration)
+
    5.3 [Setting up physical device](#53-setting-up-physical-device)
+
 6. [Testing](#6-testing)
+
    6.1 [Unit Testing](#61-unit-testing)
+   
    6.2 [User Testing](#62-user-testing)
 
 
